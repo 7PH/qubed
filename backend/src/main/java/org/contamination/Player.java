@@ -3,7 +3,7 @@ package org.contamination;
 public class Player {
   private String name;
   private Integer id;
-  private boolean affected;
+  private boolean infected;
   private PlayerStatus status;
   private double x;
   private double y;
@@ -30,12 +30,12 @@ public class Player {
     this.id = id;
   }
 
-  public boolean isAffected() {
-    return affected;
+  public boolean isInfected() {
+    return infected;
   }
 
-  public void setAffected(boolean affected) {
-    this.affected = affected;
+  public void setInfected(boolean infected) {
+    this.infected = infected;
   }
 
   public PlayerStatus getStatus() {
