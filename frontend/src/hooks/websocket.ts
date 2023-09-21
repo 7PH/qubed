@@ -1,7 +1,8 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { GameState, Player } from "../types";
+import { useRoute } from "vue-router";
 
-const PORT = 3000;
+const PORT = 8080;
 
 enum OutboundMessageType {
   Start = "start",
@@ -19,8 +20,14 @@ export function useWebSocket() {
   const connection = ref<WebSocket | undefined>(undefined);
   const playerList = ref<Player[]>([]);
 
+  const route = useRoute();
+
   onMounted(() => {
-    const socket = new WebSocket(`ws://localhost:${PORT}`);
+    const playername = route.query.name ?? "incognito";
+
+    const socket = new WebSocket(
+      `ws://localhost:${PORT}/websocket/${playername}`
+    );
     connection.value = socket;
 
     // socket.addEventListener("open", (_event) => {
@@ -56,20 +63,21 @@ export function useWebSocket() {
   });
 
   function handleMessage(data: any) {
-    switch (data.type) {
-      case InboundMessageType.StateUpdate:
-        handleStateUpdate(data.content);
-        break;
-      default:
-        console.warn(`Unknown message type received: ${data.type}`);
-    }
+    handleStateUpdate(data);
+    // switch (data.type) {
+    //   case InboundMessageType.StateUpdate:
+    //     handleStateUpdate(data.content);
+    //     break;
+    //   default:
+    //     console.warn(`Unknown message type received: ${data.type}`);
+    // }
   }
 
   function handleStateUpdate(data: {
-    game_state: GameState;
+    gameState: GameState;
     players: Player[];
   }) {
-    if (data.game_state === GameState.PENDING) {
+    if (data.gameState === GameState.PENDING) {
       playerList.value = data.players;
     } else {
       gameState = playerList;

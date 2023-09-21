@@ -1,31 +1,43 @@
 <script lang="ts" setup>
+import { ref } from "vue";
 
-import { ref } from 'vue';
-
-const username = ref('');
-
+const username = ref("");
 
 function handleEnter(e) {
-  console.log()
+  console.log();
 }
-
 </script>
 
 <template>
   <div class="layout">
-
-    <iframe src="https://giphy.com/embed/qHIj9ACRey9yBtgwD9" title="bug" width="250" height="250" frameBorder="0"></iframe>
+    <iframe
+      src="https://giphy.com/embed/qHIj9ACRey9yBtgwD9"
+      title="bug"
+      width="250"
+      height="250"
+      frameBorder="0"
+    ></iframe>
     <h1>Welcome to 'Qubed'</h1>
-    
 
-      <hr style="border-color: pink"/>
+    <hr style="border-color: pink" />
 
-      <h3>Rules:</h3>
+    <h3>Rules:</h3>
 
-      <span>This game is simple! <br style="margin-top:8px"/> When it starts, one "Qubed" will be randomly chosen. His goal is to make all other guys "Qubed" too, while other players need to run away. The game ends, when only one "non-qubed" player is left, who is the winner.</span>
-      <hr  style="border-color: pink"/>
+    <span
+      >This game is simple! <br style="margin-top: 8px" />
+      When it starts, one "Qubed" will be randomly chosen. His goal is to make
+      all other guys "Qubed" too, while other players need to run away. The game
+      ends, when only one "non-qubed" player is left, who is the winner.</span
+    >
+    <hr style="border-color: pink" />
 
-
-    <input style="margin-top: 50px" type="text" id="username" placeholder="Enter a username and press enter" v-model="username" @keyup.enter="handleEnter">
+    <input
+      style="margin-top: 50px"
+      type="text"
+      id="username"
+      placeholder="Enter a username and press enter"
+      v-model="username"
+      @keyup.enter="handleEnter"
+    />
   </div>
 </template>
