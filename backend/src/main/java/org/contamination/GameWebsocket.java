@@ -23,7 +23,7 @@ public class GameWebsocket {
   public void onOpen(Session session, @PathParam("username") String username) throws IOException {
     Player player = new Player(username);
     addPlayer(player, session);
-    session.getBasicRemote().sendText(new Gson().toJson(new ConnectedMessage("CONNECTED", player.getId())));
+    session.getBasicRemote().sendText(new Gson().toJson(new ReplyMessage("CONNECTED", new ConnectedMessage(player.getId()))));
   }
 
   @OnMessage

@@ -85,7 +85,7 @@ public class GameLogic implements Runnable {
 
   public void sendState() {
     GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS.name().toLowerCase(), GameState.PLAYERS.keySet().stream().toList());
-    String messageString = new Gson().toJson(gameStateMessage);
+    String messageString = new Gson().toJson(new ReplyMessage("GAME_STATE", gameStateMessage));
     System.out.println(messageString);
     GameState.PLAYERS.values().forEach(
       s -> s.getAsyncRemote().sendText(messageString)
