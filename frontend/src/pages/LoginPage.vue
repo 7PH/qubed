@@ -1,3 +1,29 @@
+<script lang="ts" setup>
+
+import { ref } from 'vue';
+
+const username = ref('');
+
+
+function handleEnter(e) {
+  console.log()
+}
+
+</script>
+
 <template>
-  LoginPage
+  <div style="max-width: 500px; margin: auto">
+    <h1>Welcome to 'Qubed'</h1>
+    
+
+      <hr/>
+
+      <h3>Rules:</h3>
+
+      <span>This game is simple! <br style="margin-top:8px"/> When it starts, one "Qubed" will be randomly chosen. His goal is to make all other guys "Qubed" too, while other players need to run away. The game ends, when only one "non-qubed" player is left, who is the winner.</span>
+      <hr/>
+
+
+    <input style="margin-top: 50px" type="text" id="username" placeholder="Enter a username and press enter" v-model="username" @keyup.enter="handleEnter">
+  </div>
 </template>
