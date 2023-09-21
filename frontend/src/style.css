@@ -25,9 +25,12 @@ a:hover {
 
 body {
   margin: 0;
+<<<<<<< Updated upstream
   min-width: 320px;
   min-height: 100vh;
   overflow: hidden;
+=======
+>>>>>>> Stashed changes
 }
 
 h1 {
@@ -63,6 +66,7 @@ input {
 
 input::placeholder {
   text-align: center;
+  color: white;
 }
 
 .card {
@@ -70,9 +74,18 @@ input::placeholder {
 }
 
 #app {
+  box-sizing: border-box;
+  padding: 20px;
   width: 100%;
   margin: 0 auto;
+  height: 100vb;
   text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.layout {
+  width: 500px;
 }
 
 @media (prefers-color-scheme: light) {

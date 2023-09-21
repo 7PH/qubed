@@ -12,7 +12,9 @@ function handleEnter(e) {
 </script>
 
 <template>
-  <div style="max-width: 500px; margin: auto">
+  <div class="layout">
+
+    <iframe src="https://giphy.com/embed/qHIj9ACRey9yBtgwD9" title="bug" width="250" height="250" frameBorder="0"></iframe>
     <h1>Welcome to 'Qubed'</h1>
     
 
