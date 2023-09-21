@@ -1,7 +1,7 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { Player } from "../types";
 import { resizeCanvas } from "../utils/canvas";
-import { drawPlayers } from "../utils/draw";
+import { drawGame } from "../utils/draw";
 
 const DUMMY_PLAYERS: Player[] = [
   {
@@ -29,6 +29,15 @@ export const useGameRenderer = () => {
   const canvasRef = ref<HTMLCanvasElement | null>(null);
   const contextRef = computed(() => canvasRef.value?.getContext("2d"));
 
+  // Use ResizeObserver to detect when container size changes
+  const observer = new ResizeObserver(() => {
+    console.log("ekip");
+    if (!canvasRef.value || !containerRef.value) {
+      return;
+    }
+    resizeCanvas(canvasRef.value, containerRef.value);
+  });
+
   // Create canvas when component mounts
   onMounted(() => {
     if (!containerRef.value) {
@@ -37,7 +46,8 @@ export const useGameRenderer = () => {
     ticking.value = true;
     canvasRef.value = document.createElement("canvas");
     containerRef.value.appendChild(canvasRef.value);
-    resizeCanvas(canvasRef.value);
+    resizeCanvas(canvasRef.value, containerRef.value);
+    observer.observe(containerRef.value);
     requestAnimationFrame(tick);
   });
 
@@ -48,6 +58,7 @@ export const useGameRenderer = () => {
       return;
     }
     containerRef.value.removeChild(canvasRef.value);
+    observer.unobserve(containerRef.value);
     canvasRef.value = null;
   });
 
@@ -57,7 +68,8 @@ export const useGameRenderer = () => {
       return;
     }
 
-    drawPlayers(canvasRef.value, contextRef.value, DUMMY_PLAYERS);
+    contextRef.value.reset();
+    drawGame(canvasRef.value, contextRef.value, DUMMY_PLAYERS);
 
     ticking.value && requestAnimationFrame(tick);
   }

@@ -1,4 +1,7 @@
-export function resizeCanvas(canvas: HTMLCanvasElement) {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+export function resizeCanvas(
+  canvas: HTMLCanvasElement,
+  container: HTMLDivElement
+) {
+  canvas.width = container.offsetWidth;
+  canvas.height = canvas.width;
 }

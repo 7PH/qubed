@@ -13,7 +13,17 @@ const { container } = useGameRenderer();
 <style scoped>
 .game-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.game-container > div {
+  max-width: 800px;
+  aspect-ratio: 1 / 1;
+  flex-grow: 1;
+  overflow: hidden;
 }
 </style>

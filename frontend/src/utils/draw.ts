@@ -2,8 +2,11 @@ import { Player } from "../types";
 
 const FULL_CIRCLE = 2 * Math.PI;
 
-const PLAYER_USERNAME_FONT_SIZE = 0.8 / 100; // 2% of canvas width
-const PLAYER_SIZE = 0.5 / 100; // 2% of canvas width
+const BOUNDARY_COLOR = "#f542bc";
+const BOUNDARY_WIDTH = 4;
+
+const PLAYER_USERNAME_FONT_SIZE = 1.5 / 100; // % of canvas width
+const PLAYER_SIZE = 1 / 100; // % of canvas width
 const PLAYER_COLOR = "#f542bc";
 
 /**
@@ -37,17 +40,37 @@ export function drawPlayer(
 
 /**
  * Draw all players
- * @param canvas
- * @param context
- * @param players
  */
 export function drawPlayers(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
   players: Player[]
 ) {
-  context.reset();
   for (let player of players) {
     drawPlayer(canvas, context, player);
   }
+}
+
+/**
+ * Draw game boundaries
+ */
+export function drawGameBoundaries(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D
+) {
+  context.strokeStyle = BOUNDARY_COLOR;
+  context.lineWidth = BOUNDARY_WIDTH;
+  context.strokeRect(0, 0, canvas.width, canvas.height);
+}
+
+/**
+ * Draw whole game
+ */
+export function drawGame(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+  players: Player[]
+) {
+  drawGameBoundaries(canvas, context);
+  drawPlayers(canvas, context, players);
 }
