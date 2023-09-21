@@ -1,8 +1,11 @@
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { GameObject, GameState, Player } from "../types";
 
-const PORT = 8080;
+const PORT =
+  document.location.hostname === "localhost" ? 8080 : document.location.port;
+
+const WS_PROTOCOL = document.location.protocol === "https:" ? "wss" : "ws";
 
 enum OutboundMessageType {
   Start = "start",
@@ -15,6 +18,7 @@ enum InboundMessageType {
   Connected = "CONNECTED",
 }
 
+export let websocket: WebSocket;
 export let gameState: GameObject = {
   playerId: 0,
   players: [],
@@ -36,7 +40,7 @@ export function useWebSocket() {
     const playername = route.query.name ?? "incognito";
 
     const socket = new WebSocket(
-      `ws://localhost:${PORT}/websocket/${playername}`
+      `${WS_PROTOCOL}://${document.location.host}:${PORT}/websocket/${playername}`
     );
     connection.value = socket;
     connectionReference = socket;

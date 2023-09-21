@@ -1,0 +1,29 @@
+http:
+  # Routers
+  routers:
+    frontend:
+      service: frontend@file
+      entrypoints: qubed
+      rule: "Host(`{{ env "PUBLIC_HOST" }}`) && (! PathPrefix(`/websocket`))"
+      {{ if env "USE_TLS" }}
+      tls:
+        certResolver: letsencrypt
+      {{ end }}
+    backend:
+      service: backend@file
+      entrypoints: qubed
+      rule: "Host(`{{ env "PUBLIC_HOST" }}`) && PathPrefix(`/websocket`)"
+      {{ if env "USE_TLS" }}
+      tls:
+        certResolver: letsencrypt
+      {{ end }}
+  # Link services to docker containers
+  services:
+    frontend:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:8081"
+    backend:
+      loadBalancer:
+        servers:
+          - url: "http://backend:8080"

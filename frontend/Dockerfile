@@ -1,4 +1,5 @@
 FROM node:18-alpine
+EXPOSE 8081
 
 WORKDIR /frontend
 
@@ -8,6 +9,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 8000
+RUN npm run build
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "./node_modules/.bin/http-server", "dist", "-p", "8081" ]

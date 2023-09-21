@@ -63,7 +63,6 @@ public class GameWebsocket {
 
   @OnError
   public void onError(Session session, Throwable throwable) {
-    System.out.println(session.getId());
     throwable.printStackTrace();
   }
 }
