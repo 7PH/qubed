@@ -2,14 +2,16 @@ package org.contamination;
 
 public class Player {
   private String name;
-  private String id;
+  private Integer id;
   private boolean affected;
   private PlayerStatus status;
-  private float x;
-  private float y;
+  private double x;
+  private double y;
 
   public Player(String name) {
     this.name = name;
+    this.status = PlayerStatus.WAITING;
+    this.id = GameState.atomicInteger.getAndIncrement();
   }
 
   public String getName() {
@@ -20,11 +22,11 @@ public class Player {
     this.name = name;
   }
 
-  public String getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -44,19 +46,19 @@ public class Player {
     this.status = status;
   }
 
-  public float getX() {
+  public double getX() {
     return x;
   }
 
-  public void setX(float x) {
+  public void setX(double x) {
     this.x = x;
   }
 
-  public float getY() {
+  public double getY() {
     return y;
   }
 
-  public void setY(float y) {
+  public void setY(double y) {
     this.y = y;
   }
 

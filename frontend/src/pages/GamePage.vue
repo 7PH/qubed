@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import { useGameRenderer } from '../hooks/useGameRenderer';
+
+const { container } = useGameRenderer();
+</script>
+
 <template>
-  GamePage
+  <div class="game-container">
+    <div ref="container"></div>
+  </div>
 </template>
+
+<style scoped>
+.game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.game-container > div {
+  max-width: 800px;
+  aspect-ratio: 1 / 1;
+  flex-grow: 1;
+  overflow: hidden;
+}
+</style>

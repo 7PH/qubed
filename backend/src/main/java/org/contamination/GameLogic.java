@@ -1,5 +1,7 @@
 package org.contamination;
 
+import com.google.gson.Gson;
+
 public class GameLogic implements Runnable {
 
   private static double SPEED = 0.01;
@@ -16,6 +18,7 @@ public class GameLogic implements Runnable {
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
+      sendState();
 
     }
 
@@ -53,8 +56,8 @@ public class GameLogic implements Runnable {
         continue;
       }
 
-      float x1 = otherPlayer.getX();
-      float y1 = otherPlayer.getY();
+      double x1 = otherPlayer.getX();
+      double y1 = otherPlayer.getY();
 
       boolean collisionDetected = arePointsColliding(newX, newY, x1, y1);
 
@@ -68,14 +71,22 @@ public class GameLogic implements Runnable {
 
   }
 
-  private boolean arePointsColliding(float newX, float newY, float x1, float y1) {
+  private boolean arePointsColliding(double newX, double newY, double x1, double y1) {
     double distance = getDistance(newX, newY, x1, y1);
     return distance / 2 > SIZE_OF_THE_SPRITE;
   }
 
-  private double getDistance(float x1, float y1, float x2, float y2) {
+  private double getDistance(double x1, double y1, double x2, double y2) {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
   }
 
 
+  public void sendState() {
+    GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS, GameState.PLAYERS.keySet().stream().toList());
+    String messageString = new Gson().toJson(gameStateMessage);
+    System.out.println(messageString);
+    GameState.PLAYERS.values().forEach(
+      s -> s.getAsyncRemote().sendText(messageString)
+    );
+  }
 }
