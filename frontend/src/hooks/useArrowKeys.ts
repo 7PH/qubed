@@ -10,7 +10,7 @@ const KEY_MAP: Record<string, string> = {
   ArrowDown: "down",
 };
 
-export type ArrowKeyChange = { key: string; pressed: boolean };
+export type ArrowKeyChange = { [key: string]: boolean };
 
 export type CallbackType = (args: ArrowKeyChange) => unknown;
 
@@ -38,8 +38,7 @@ export const useArrowKeys = (callback: CallbackType) => {
     const pressed = event.type === "keydown";
     keys.value[key] = pressed;
     callback({
-      key,
-      pressed,
+      [key]: pressed,
     });
   }
 };

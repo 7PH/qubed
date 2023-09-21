@@ -20,8 +20,8 @@ export function drawPlayer(
   context: CanvasRenderingContext2D,
   player: Player
 ) {
-  const realX = player.position[0] * canvas.width;
-  const realY = player.position[1] * canvas.height;
+  const realX = player.x * canvas.width;
+  const realY = player.y * canvas.height;
   const realFontSize = PLAYER_USERNAME_FONT_SIZE * canvas.width;
   const realRadius = PLAYER_SIZE * canvas.width;
 

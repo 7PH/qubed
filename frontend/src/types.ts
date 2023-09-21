@@ -8,7 +8,8 @@ export type Player = {
   name: string;
   status: PlayerStatus;
   infected: boolean;
-  position: [number, number];
+  x: number;
+  y: number;
 };
 
 export enum GameState {
