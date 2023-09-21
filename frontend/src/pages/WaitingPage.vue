@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { PlayerStatus } from "../types";
 import { useWebSocket } from "../hooks/websocket";
 
-const { playerList } = useWebSocket();
+const { playerId, playerList, setReady } = useWebSocket();
+
+function handleReadyClick() {
+  setReady();
+}
 </script>
 
 <template>
@@ -15,12 +20,30 @@ const { playerList } = useWebSocket();
       </thead>
       <tr v-for="player in playerList">
         <td>
-          {{ player.name }}
+          <span
+            :style="{ fontWeight: player.id === playerId ? 600 : 'normal' }"
+            >{{ player.name }}</span
+          >
         </td>
         <td class="status">
-          <span class="badge">{{
-            player.ready ? "✅ Ready" : "⏳ Wait up"
-          }}</span>
+          <span
+            class="badge"
+            v-if="
+              player.id !== playerId || player.status === PlayerStatus.Ready
+            "
+            >{{
+              player.status === PlayerStatus.Ready ? "✅ Ready" : "⏳ Wait up"
+            }}</span
+          >
+
+          <button
+            v-if="
+              player.id === playerId && !(player.status === PlayerStatus.Ready)
+            "
+            @click="handleReadyClick"
+          >
+            Ready?
+          </button>
         </td>
       </tr>
     </table>
