@@ -90,14 +90,17 @@ public class GameLogic implements Runnable {
     player.setX(newX);
 
     List<Player> playerCollisions = getPlayerCollisions(player);
+    for (Player playerCollision : playerCollisions) {
+      //compute vector angle between the two Player
+      double alpha = Math.atan2(playerCollision.getY() - player.getY(), playerCollision.getX() - player.getX());
+      //reposition player to the edge of the other player
+      player.setX(playerCollision.getX() - Math.cos(alpha) * SIZE_OF_THE_SPRITE);
+      player.setY(playerCollision.getY() - Math.sin(alpha) * SIZE_OF_THE_SPRITE);
+    }
 
     if (playerCollisions.stream().anyMatch(Player::isInfected)) {
       player.setInfected(true);
-    }
-
-    if (!playerCollisions.isEmpty()) {
-      player.setX(oldX);
-      player.setY(oldY);
+      playerCollisions.forEach(otherPlayer -> otherPlayer.setInfected(true));
     }
 
   }
