@@ -22,7 +22,7 @@ public class GameLogic implements Runnable {
 
     while (true) {
       if (numberOfNonInfectedPlayers() <= 1) {
-        GameState.clean();
+        finishGame();
       }
 
       if (GameState.GAME_STATUS == GameStatus.RUNNING) {
@@ -42,10 +42,14 @@ public class GameLogic implements Runnable {
 
   }
 
+  private static void finishGame() {
+    GameState.GAME_STATUS = GameStatus.FINISHED;
+    GameState.clean();
+  }
+
   private static void randomlyInfectOnePlayer() {
     List<Player> players = GameState.PLAYERS.keySet().stream().toList();
     Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size()));
-    System.out.println("Infecting player " + player.getName());
     player.setInfected(true);
   }
 
@@ -77,20 +81,22 @@ public class GameLogic implements Runnable {
     double step = SPEED;
 
     double x = (playerInput.right ? step : 0) + (playerInput.left ? -step : 0);
-    double y = (playerInput.up ? step : 0) + (playerInput.down ? -step : 0);
+    double y = (playerInput.up ? -step : 0) + (playerInput.down ? step : 0);
     double newX = min(max(oldX+x, 0), 1);
     double newY = min(max(oldY+y, 0), 1);
 
+    player.setY(newY);
+    player.setX(newX);
+
     List<Player> playerCollisions = getPlayerCollisions(player);
-    System.out.println("Colliding with " + playerCollisions.size() + " players");
 
     if (playerCollisions.stream().anyMatch(Player::isInfected)) {
       player.setInfected(true);
     }
 
-    if (playerCollisions.isEmpty()) {
-      player.setY(newY);
-      player.setX(newX);
+    if (!playerCollisions.isEmpty()) {
+      player.setX(oldX);
+      player.setY(oldY);
     }
 
   }

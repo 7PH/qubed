@@ -44,7 +44,6 @@ public class GameState {
   }
 
   public static void clean() {
-    GAME_STATUS = GameStatus.PENDING;
     PLAYERS.keySet().forEach(Player::clean);
     gameStartTime = 0;
   }
