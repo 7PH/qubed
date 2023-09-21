@@ -12,9 +12,10 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation 'org.eclipse.jetty.aggregate:jetty-all:9.4.51.v20230217'
-
-
+    implementation('javax.websocket:javax.websocket-api:1.1')
+    implementation 'org.eclipse.jetty:jetty-server:10.0.16'
+    implementation 'org.eclipse.jetty.websocket:websocket-javax-server:10.0.16'
+    implementation 'org.eclipse.jetty.websocket:websocket-javax-client:10.0.16'
 }
 
 test {
