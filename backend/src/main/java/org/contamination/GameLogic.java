@@ -9,7 +9,7 @@ public class GameLogic implements Runnable {
 
   private static final double SPEED = 0.01;
   public static final double SIZE_OF_THE_SPRITE = 0.02;
-  private static final long FRAME_RATE = 10;
+  private static final long FRAME_RATE = 1000;
 
   @Override
   public void run() {

@@ -27,7 +27,7 @@ public class CollisionDetector {
 
   private static boolean arePointsColliding(double newX, double newY, double x1, double y1) {
     double distance = getDistance(newX, newY, x1, y1);
-    return distance / 2 > SIZE_OF_THE_SPRITE;
+    return distance / 2 < SIZE_OF_THE_SPRITE;
   }
 
   private static double getDistance(double x1, double y1, double x2, double y2) {
