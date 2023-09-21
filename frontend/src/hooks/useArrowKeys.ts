@@ -1,7 +1,7 @@
 import { onMounted, onUnmounted, ref } from "vue";
 
 /**
- * Mapping between key codes and key names
+ * Mapping between key names as they come from the event handler and key names as the backend knows them.
  */
 const KEY_MAP: Record<string, string> = {
   ArrowLeft: "left",
@@ -10,12 +10,10 @@ const KEY_MAP: Record<string, string> = {
   ArrowDown: "down",
 };
 
-export type ArrowKeyChange = { [key: string]: boolean };
-
-export type CallbackType = (args: ArrowKeyChange) => unknown;
+export type CallbackType = (args: { [key: string]: boolean }) => unknown;
 
 export const useArrowKeys = (callback: CallbackType) => {
-  const keys = ref<Record<string, boolean>>({});
+  const keys = ref<{ [key: string]: boolean }>({});
 
   onMounted(() => {
     window.addEventListener("keydown", handle);
@@ -37,8 +35,6 @@ export const useArrowKeys = (callback: CallbackType) => {
     const key = KEY_MAP[event.key];
     const pressed = event.type === "keydown";
     keys.value[key] = pressed;
-    callback({
-      [key]: pressed,
-    });
+    callback(keys.value);
   }
 };

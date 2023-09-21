@@ -10,7 +10,6 @@ import static javax.swing.UIManager.get;
 import static org.contamination.CollisionDetector.getPlayerCollisions;
 
 public class GameLogic implements Runnable {
-
   private static final double SPEED = 0.01;
   public static final double SIZE_OF_THE_SPRITE = 0.02;
   private static final long TIME_BEFORE_INFECTION = 5000;
@@ -18,11 +17,7 @@ public class GameLogic implements Runnable {
 
   @Override
   public void run() {
-
-
     while (true) {
-
-
       if (GameState.GAME_STATUS == GameStatus.RUNNING) {
         if (numberOfNonInfectedPlayers() <= 1) {
           finishGame();
@@ -83,26 +78,28 @@ public class GameLogic implements Runnable {
 
     double x = (playerInput.right ? step : 0) + (playerInput.left ? -step : 0);
     double y = (playerInput.up ? -step : 0) + (playerInput.down ? step : 0);
-    double newX = min(max(oldX+x, 0), 1);
-    double newY = min(max(oldY+y, 0), 1);
+    double newX = min(max(oldX + x, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
+    double newY = min(max(oldY + y, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
 
     player.setY(newY);
     player.setX(newX);
 
     List<Player> playerCollisions = getPlayerCollisions(player);
     for (Player playerCollision : playerCollisions) {
-      //compute vector angle between the two Player
+      double D = Math.sqrt(Math.pow(playerCollision.getX() - player.getX(), 2) + Math.pow(playerCollision.getY() - player.getY(), 2));
+      double d = (SIZE_OF_THE_SPRITE * 2) - D;
       double alpha = Math.atan2(playerCollision.getY() - player.getY(), playerCollision.getX() - player.getX());
-      //reposition player to the edge of the other player
-      player.setX(playerCollision.getX() - Math.cos(alpha) * SIZE_OF_THE_SPRITE);
-      player.setY(playerCollision.getY() - Math.sin(alpha) * SIZE_OF_THE_SPRITE);
-    }
+      player.setX(player.getX() - Math.cos(alpha) * d);
+      player.setY(player.getY() - Math.sin(alpha) * d);
+      playerCollision.setX(playerCollision.getX() + Math.cos(alpha) * d);
+      playerCollision.setY(playerCollision.getY() + Math.sin(alpha) * d);
 
-    if (playerCollisions.stream().anyMatch(Player::isInfected)) {
-      player.setInfected(true);
-      playerCollisions.forEach(otherPlayer -> otherPlayer.setInfected(true));
+      if (playerCollision.isInfected()) {
+        player.setInfected(true);
+      } else if (player.isInfected()) {
+        playerCollision.setInfected(true);
+      }
     }
-
   }
 
   public void sendState() {

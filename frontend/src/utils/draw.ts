@@ -6,7 +6,7 @@ const BOUNDARY_COLOR = "#aed4eb";
 const BOUNDARY_WIDTH = 4;
 
 const PLAYER_USERNAME_FONT_SIZE = 1.8 / 100; // % of canvas width
-const PLAYER_SIZE = 1.5 / 100; // % of canvas width
+const PLAYER_SIZE = 2 / 100; // % of canvas width
 const PLAYER_SANE_FILL_COLOR = "#78eb7b";
 const PLAYER_SANE_STROKE_COLOR = "#169119";
 const PLAYER_INFECTED_FILL_COLOR = "#f26179";
@@ -18,7 +18,8 @@ const PLAYER_INFECTED_STROKE_COLOR = "#bf1531";
 export function drawPlayer(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
-  player: Player
+  player: Player,
+  isLocalPlayer: boolean
 ) {
   const realX = player.x * canvas.width;
   const realY = player.y * canvas.height;
@@ -44,7 +45,7 @@ export function drawPlayer(
     : PLAYER_SANE_FILL_COLOR;
   context.font = `${realFontSize}px Arial`;
   context.textAlign = "center";
-  context.fillText(player.name, realX, realY - realRadius / 2 - realFontSize);
+  context.fillText(`${isLocalPlayer ? '⭐' : ''}${player.name}`, realX, realY - realRadius / 2 - realFontSize);
 }
 
 /**
@@ -53,10 +54,10 @@ export function drawPlayer(
 export function drawPlayers(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
-  players: Player[]
+  gameObject: GameObject
 ) {
-  for (let player of players) {
-    drawPlayer(canvas, context, player);
+  for (let player of gameObject.players) {
+    drawPlayer(canvas, context, player, player.id === gameObject.playerId);
   }
 }
 
@@ -78,8 +79,8 @@ export function drawGameBoundaries(
 export function drawGame(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
-  gameState: GameObject
+  gameObject: GameObject
 ) {
   drawGameBoundaries(canvas, context);
-  drawPlayers(canvas, context, gameState.players);
+  drawPlayers(canvas, context, gameObject);
 }
