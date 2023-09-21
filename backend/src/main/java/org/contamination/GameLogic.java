@@ -21,11 +21,12 @@ public class GameLogic implements Runnable {
 
 
     while (true) {
-      if (numberOfNonInfectedPlayers() <= 1) {
-        finishGame();
-      }
+
 
       if (GameState.GAME_STATUS == GameStatus.RUNNING) {
+        if (numberOfNonInfectedPlayers() <= 1) {
+          finishGame();
+        }
         calculateNewPositions();
         if (isZeroInfectedPlayer() && isReadyToInfectTime()) {
           randomlyInfectOnePlayer();
