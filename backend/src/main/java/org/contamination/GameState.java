@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.websocket.Session;
 
+import static org.contamination.CollisionDetector.anyCollision;
+
 public class GameState {
   public static Map<Player, Session> PLAYERS = new ConcurrentHashMap<>();
   public static Map<String, Player> SESSION_IDS_PLAYERS = new ConcurrentHashMap<>();
@@ -25,6 +27,23 @@ public class GameState {
   }
 
   public static void start() {
+    clean();
     GAME_STATUS = GameStatus.RUNNING;
+    positionPlayers();
+  }
+
+  public static void clean() {
+    PLAYERS.keySet().forEach(Player::clean);
+  }
+
+  public static void positionPlayers() {
+    for (Player player : PLAYERS.keySet()) {
+
+      while (anyCollision(player)) {
+        player.setX(Math.random());
+        player.setY(Math.random());
+      }
+
+    }
   }
 }

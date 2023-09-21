@@ -12,6 +12,14 @@ public class Player {
     this.name = name;
     this.status = PlayerStatus.WAITING;
     this.id = GameState.atomicInteger.getAndIncrement();
+    this.x = Math.random();
+    this.y = Math.random();
+  }
+
+  public void clean() {
+    this.x = Math.random();
+    this.y = Math.random();
+    this.infected = false;
   }
 
   public String getName() {

@@ -1,11 +1,14 @@
 package org.contamination;
 
 import com.google.gson.Gson;
+import java.util.List;
+
+import static org.contamination.CollisionDetector.getPlayerCollisions;
 
 public class GameLogic implements Runnable {
 
   private static final double SPEED = 0.01;
-  private static final double SIZE_OF_THE_SPRITE = 0.02;
+  public static final double SIZE_OF_THE_SPRITE = 0.02;
   private static final long FRAME_RATE = 20;
 
   @Override
@@ -53,35 +56,18 @@ public class GameLogic implements Runnable {
       newX = Math.min(oldX - step, 0);
     }
 
-    for (Player otherPlayer : GameState.PLAYERS.keySet()) {
-      if (otherPlayer.getId().equals(player.getId())) {
-        continue;
-      }
+    List<Player> playerCollisions = getPlayerCollisions(player);
 
-      double x1 = otherPlayer.getX();
-      double y1 = otherPlayer.getY();
-
-      boolean collisionDetected = arePointsColliding(newX, newY, x1, y1);
-
-      if (collisionDetected) {
-        return;
-      }
+    if (playerCollisions.stream().anyMatch(Player::isInfected)) {
+      player.setInfected(true);
     }
 
-    player.setX(newX);
-    player.setY(newY);
+    if (playerCollisions.isEmpty()) {
+      player.setY(newY);
+      player.setX(newX);
+    }
 
   }
-
-  private boolean arePointsColliding(double newX, double newY, double x1, double y1) {
-    double distance = getDistance(newX, newY, x1, y1);
-    return distance / 2 > SIZE_OF_THE_SPRITE;
-  }
-
-  private double getDistance(double x1, double y1, double x2, double y2) {
-    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-  }
-
 
   public void sendState() {
     GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS.name().toLowerCase(), GameState.PLAYERS.keySet().stream().toList());
