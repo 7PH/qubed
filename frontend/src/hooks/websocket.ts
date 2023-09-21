@@ -19,6 +19,8 @@ export let gameState: GameObject = {
   playerId: 0,
   players: [],
 };
+
+export let connectionReference: WebSocket | undefined = undefined;
 export let sendCommands: <T>(content: T) => void;
 export let closeConnection: () => void;
 
@@ -29,13 +31,14 @@ export function useWebSocket() {
 
   const route = useRoute();
 
-  onMounted(() => {
+  function connect() {
     const playername = route.query.name ?? "incognito";
 
     const socket = new WebSocket(
       `ws://localhost:${PORT}/websocket/${playername}`
     );
     connection.value = socket;
+    connectionReference = socket;
 
     // Listen for messages
     socket.addEventListener("message", (event) => {
@@ -62,7 +65,7 @@ export function useWebSocket() {
     closeConnection = function () {
       socket.close();
     };
-  });
+  }
 
   function handleMessage(data: any) {
     switch (data.type) {
@@ -95,7 +98,7 @@ export function useWebSocket() {
 
   function startGame() {
     connection.value?.send(
-      JSON.stringify({ type: OutboundMessageType.Start, content: "" })
+      JSON.stringify({ type: OutboundMessageType.Start, content: {} })
     );
   }
 
@@ -103,10 +106,17 @@ export function useWebSocket() {
     connection.value?.send(
       JSON.stringify({
         type: OutboundMessageType.Ready,
-        content: "",
+        content: {},
       })
     );
   }
 
-  return { playerId, playerList, setReady, startGame };
+  function disconnect() {
+    console.log(connectionReference?.OPEN);
+    if (connectionReference?.OPEN) {
+      connectionReference.close();
+    }
+  }
+
+  return { playerId, playerList, connect, disconnect, setReady, startGame };
 }
