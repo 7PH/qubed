@@ -2,12 +2,15 @@ import { Player } from "../types";
 
 const FULL_CIRCLE = 2 * Math.PI;
 
-const BOUNDARY_COLOR = "#f542bc";
+const BOUNDARY_COLOR = "#aed4eb";
 const BOUNDARY_WIDTH = 4;
 
 const PLAYER_USERNAME_FONT_SIZE = 1.5 / 100; // % of canvas width
 const PLAYER_SIZE = 1 / 100; // % of canvas width
-const PLAYER_COLOR = "#f542bc";
+const PLAYER_SANE_FILL_COLOR = "#78eb7b";
+const PLAYER_SANE_STROKE_COLOR = "#169119";
+const PLAYER_INFECTED_FILL_COLOR = "#f26179";
+const PLAYER_INFECTED_STROKE_COLOR = "#bf1531";
 
 /**
  * Draw a player
@@ -23,16 +26,22 @@ export function drawPlayer(
   const realRadius = PLAYER_SIZE * canvas.width;
 
   // Circle
-  context.strokeStyle = "white";
+  context.strokeStyle = player.infected
+    ? PLAYER_INFECTED_STROKE_COLOR
+    : PLAYER_SANE_STROKE_COLOR;
   context.lineWidth = 1;
-  context.fillStyle = PLAYER_COLOR;
+  context.fillStyle = player.infected
+    ? PLAYER_INFECTED_FILL_COLOR
+    : PLAYER_SANE_FILL_COLOR;
   context.beginPath();
   context.arc(realX, realY, realRadius, 0, FULL_CIRCLE);
   context.fill();
   context.stroke();
 
   // Username
-  context.fillStyle = "white";
+  context.fillStyle = player.infected
+    ? PLAYER_INFECTED_FILL_COLOR
+    : PLAYER_SANE_FILL_COLOR;
   context.font = `${realFontSize}px Arial`;
   context.textAlign = "center";
   context.fillText(player.name, realX, realY - realRadius / 2 - realFontSize);
