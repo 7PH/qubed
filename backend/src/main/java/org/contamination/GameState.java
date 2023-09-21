@@ -32,4 +32,7 @@ public class GameState {
   }
 
 
+  public static void start() {
+    GAME_STATUS = "running";
+  }
 }

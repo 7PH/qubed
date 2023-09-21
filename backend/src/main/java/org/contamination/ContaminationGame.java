@@ -5,7 +5,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.javax.server.config.JavaxWebSocketServletContainerInitializer;
 
-public class HelloWorld {
+public class ContaminationGame {
   public static void main(String[] args) throws Exception {
 
     Server server = new Server(8080);
@@ -25,7 +25,7 @@ public class HelloWorld {
       wsContainer.setDefaultMaxTextMessageBufferSize(65535);
 
       // Add WebSocket endpoint to javax.websocket layer
-      wsContainer.addEndpoint(Endpoint.class);
+      wsContainer.addEndpoint(GameWebsocket.class);
     });
     server.start();
     createNewThread();

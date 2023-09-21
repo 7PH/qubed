@@ -16,7 +16,7 @@ import static org.contamination.GameState.removePlayer;
 import static org.contamination.PlayerStatus.READY;
 
 @ServerEndpoint(value = "/websocket/{username}")
-public class Endpoint {
+public class GameWebsocket {
 
   GameState gameState = new GameState();
 
@@ -33,6 +33,9 @@ public class Endpoint {
       case "ready":
         Player player = SESSION_IDS_PLAYERS.get(session.getId());
         player.setStatus(READY);
+        break;
+      case "start":
+        GameState.start();
     }
 
   }
