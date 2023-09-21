@@ -14,6 +14,11 @@ export type Player = {
 export enum GameState {
   PENDING = "pending",
   RUNNING = "running",
+  FINISHED = "finished",
 }
 
-export type GameObject = { playerId: number; players: Player[] };
+export type GameObject = {
+  playerId: number;
+  players: Player[];
+  gameFinished: boolean;
+};

@@ -2,6 +2,8 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { GameObject, GameState, Player } from "../types";
 
+const GAME_END_DELAY = 5000;
+
 const PORT =
   document.location.hostname === "localhost" ? 8080 : document.location.port;
 
@@ -22,6 +24,7 @@ export let websocket: WebSocket;
 export let gameState: GameObject = {
   playerId: 0,
   players: [],
+  gameFinished: false,
 };
 
 export let connectionReference: WebSocket | undefined = undefined;
@@ -91,6 +94,12 @@ export function useWebSocket() {
   }) {
     if (data.gameState === GameState.PENDING) {
       playerList.value = data.players;
+    } else if (data.gameState === GameState.FINISHED) {
+      gameState.gameFinished = true;
+
+      setTimeout(() => {
+        router.push("/scoreboard");
+      }, GAME_END_DELAY);
     } else if (data.gameState === GameState.RUNNING) {
       gameState.players = data.players;
 
