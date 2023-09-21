@@ -2,6 +2,7 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { Player } from "../types";
 import { resizeCanvas } from "../utils/canvas";
 import { drawGame } from "../utils/draw";
+import { ArrowKeyChange, useArrowKeys } from "./useArrowKeys";
 
 const DUMMY_PLAYERS: Player[] = [
   {
@@ -20,6 +21,10 @@ const DUMMY_PLAYERS: Player[] = [
   },
 ];
 
+const sendCommand = (keys: ArrowKeyChange) => {
+  console.log("keys", keys);
+};
+
 export const useGameRenderer = () => {
   // Ticking logic
   const ticking = ref(false);
@@ -29,9 +34,11 @@ export const useGameRenderer = () => {
   const canvasRef = ref<HTMLCanvasElement | null>(null);
   const contextRef = computed(() => canvasRef.value?.getContext("2d"));
 
+  // Keyboard state
+  useArrowKeys(sendCommand);
+
   // Use ResizeObserver to detect when container size changes
   const observer = new ResizeObserver(() => {
-    console.log("ekip");
     if (!canvasRef.value || !containerRef.value) {
       return;
     }
