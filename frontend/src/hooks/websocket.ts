@@ -1,5 +1,5 @@
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { GameObject, GameState, Player } from "../types";
 
 const PORT = 8080;
@@ -30,6 +30,7 @@ export function useWebSocket() {
   const playerId = ref<number>(0);
 
   const route = useRoute();
+  const router = useRouter();
 
   function connect() {
     const playername = route.query.name ?? "incognito";
@@ -86,8 +87,12 @@ export function useWebSocket() {
   }) {
     if (data.gameState === GameState.PENDING) {
       playerList.value = data.players;
-    } else {
-      gameState.players = playerList.value;
+    } else if (data.gameState === GameState.RUNNING) {
+      gameState.players = data.players;
+
+      if (route.path.includes("waiting")) {
+        router.push("/game");
+      }
     }
   }
 
