@@ -47,13 +47,13 @@ public class GameLogic implements Runnable {
       newY = Math.min(oldY + step, 1);
     }
     if (playerInput.down) {
-      newY = Math.min(oldY - step, 0);
+      newY = Math.max(oldY - step, 0);
     }
     if (playerInput.right) {
       newX = Math.min(oldX + step, 1);
     }
     if (playerInput.left) {
-      newX = Math.min(oldX - step, 0);
+      newX = Math.max(oldX - step, 0);
     }
 
     List<Player> playerCollisions = getPlayerCollisions(player);
