@@ -20,7 +20,6 @@ enum InboundMessageType {
   Connected = "CONNECTED",
 }
 
-export let websocket: WebSocket;
 export let gameState: GameObject = {
   playerId: 0,
   players: [],
@@ -38,10 +37,9 @@ export function useWebSocket() {
 
   const route = useRoute();
   const router = useRouter();
+  const playername = route.query.name ?? "incognito";
 
   function connect() {
-    const playername = route.query.name ?? "incognito";
-
     const socket = new WebSocket(
       `${WS_PROTOCOL}://${document.location.hostname}:${PORT}/websocket/${playername}`
     );
@@ -98,7 +96,7 @@ export function useWebSocket() {
       gameState.gameFinished = true;
 
       setTimeout(() => {
-        router.push("/scoreboard");
+        router.push(`/scoreboard?name=${playername}`);
       }, GAME_END_DELAY);
     } else if (data.gameState === GameState.RUNNING) {
       gameState.players = data.players;
@@ -130,7 +128,6 @@ export function useWebSocket() {
   }
 
   function disconnect() {
-    console.log(connectionReference?.OPEN);
     if (connectionReference?.OPEN) {
       connectionReference.close();
     }

@@ -1,19 +1,34 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { gameState, useWebSocket } from '../hooks/websocket';
+
+const router = useRouter()
+const route = useRoute()
+const { disconnect } = useWebSocket();
+
 const mockedUsers = Array.from({ length: 20}).map((_, index) => ({
   name: `Player${index +1}`,
   place: index + 1
 }))
-const winner = 'Coolguy';
+const winner = gameState.players.find((player) => !player.infected)?.name || '';
+
+const goBackToWaitingRoom = () => {
+  router.push(`/waiting?name=${route.query.name}`)
+}
+
+onMounted(disconnect);
+
 </script>
 
 <template>
   <div class="layout">
     <div class="winner">
-      <h2>Congrats {{winner.toUpperCase()}}, <br/> you won!!!1! </h2>
+      <h2>Congrats {{winner.toUpperCase()}}, <br/> you won!</h2>
       <iframe src="https://giphy.com/embed/2gtoSIzdrSMFO" width="120" height="90" frameBorder="0" ></iframe>
     </div>
     <div class="scoreboard">
-        <div class="row">
+        <div class="row header-row">
           <div class="column">
             <strong>Name</strong>
           </div>
@@ -28,7 +43,7 @@ const winner = 'Coolguy';
         </div>
     </div>
 
-    <button class="wait-btn">Waiting room</button>
+    <button class="wait-btn w-100" @click="goBackToWaitingRoom">Go to waiting room</button>
   </div>
 </template>
 
@@ -50,14 +65,19 @@ const winner = 'Coolguy';
 .row {
   display: flex;
   padding: 10px;
-  border-bottom: 1px solid pink;
+  border-bottom: 1px solid var(--primary-color);
 }
+
+.header-row {
+  position: sticky;
+  top: 0;
+}
+
 .column {
   flex-grow: 1;
 }
 
 .wait-btn {
   margin-top: 10px;
-  width: 100%;
 }
 </style>

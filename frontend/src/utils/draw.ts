@@ -2,7 +2,7 @@ import { GameObject, Player } from "../types";
 
 const FULL_CIRCLE = 2 * Math.PI;
 
-const BOUNDARY_COLOR = "#aed4eb";
+const BOUNDARY_COLOR = "pink";
 const BOUNDARY_WIDTH = 4;
 
 const PLAYER_USERNAME_FONT_SIZE = 1.8 / 100; // % of canvas width

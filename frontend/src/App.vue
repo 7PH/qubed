@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <main>
+  <main style="overflow: auto;">
     <router-view></router-view>
   </main>
 </template>

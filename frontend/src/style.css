@@ -1,11 +1,18 @@
 :root {
+  --primary-text: rgba(255, 255, 255, 0.87);
+  --primary-color: pink;
+  --background-primary: #242424;
+  --background-secondary: #3b3b3b;
+  --radius: 4px;
+  --border: 1px solid var(--primary-color);
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--primary-text);
+  background-color: var(--background-primary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,19 +21,8 @@
   -webkit-text-size-adjust: 100%;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
   overflow: hidden;
 }
 
@@ -36,38 +32,40 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  border-radius: 4px;
+  border: var(--border);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--background-secondary);
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: pink;
+  border-color: var(--primary-color);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto pink;
+  outline: 4px auto var(--primary-color);
+}
+button:disabled {
+  border: 1px solid transparent;
 }
 
 input {
-  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: var(--background-secondary);
+  border-radius: var(--radius);
+  border: var(--border);
   outline: none;
-  height: 30px;
+  height: 40px;
   width: 100%;
 }
 
 input::placeholder {
   text-align: center;
-  color: white;
-}
-
-.card {
-  padding: 2em;
+  color: var(--primary-text);
 }
 
 #app {
@@ -85,15 +83,11 @@ input::placeholder {
   width: 500px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.w-100 {
+  width: 100%;
+}
+
+.card {
+  padding: 2em;
+  background-color: var(--background-secondary);
 }

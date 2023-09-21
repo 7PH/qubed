@@ -26,27 +26,31 @@ onMounted(() => {
       height="250"
       frameBorder="0"
     ></iframe>
-    <h1>Welcome to 'Qubed'</h1>
-
-    <hr style="border-color: pink" />
-
-    <h3>Rules:</h3>
-
-    <span
-      >This game is simple! <br style="margin-top: 8px" />
-      When it starts, one "Qubed" will be randomly chosen. His goal is to make
-      all other guys "Qubed" too, while other players need to run away. The game
-      ends, when only one "non-qubed" player is left, who is the winner.</span
-    >
-    <hr style="border-color: pink" />
+    <h1>Qubed</h1>
 
     <input
-      style="margin-top: 50px"
+      style="margin-top: 20px"
       type="text"
       id="username"
       placeholder="Enter a username and press enter"
       v-model="username"
       @keyup.enter="handleEnter"
     />
+
+
+    <h3 class="rules">Rules:</h3>
+    <span
+      >This game is simple! <br style="margin-top: 8px" />
+      When it starts, one "Qubed" will be randomly chosen. His goal is to make
+      all other guys "Qubed" too, while other players need to run away. The game
+      ends, when only one "non-qubed" player is left, who is the winner.</span
+    >  
   </div>
 </template>
+
+
+<style scoped>
+.rules {
+  margin-top: 150px;
+}
+</style>
