@@ -28,6 +28,11 @@ public class HelloWorld {
       wsContainer.addEndpoint(Endpoint.class);
     });
     server.start();
+    createNewThread();
     server.join();
+  }
+
+  private static void createNewThread() {
+//    new Thread(runnable).setDaemon(true);
   }
 }

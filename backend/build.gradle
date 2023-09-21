@@ -12,10 +12,11 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation('javax.websocket:javax.websocket-api:1.1')
+    implementation 'javax.websocket:javax.websocket-api:1.1'
     implementation 'org.eclipse.jetty:jetty-server:10.0.16'
     implementation 'org.eclipse.jetty.websocket:websocket-javax-server:10.0.16'
     implementation 'org.eclipse.jetty.websocket:websocket-javax-client:10.0.16'
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 test {
