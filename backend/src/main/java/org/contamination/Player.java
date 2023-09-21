@@ -20,6 +20,7 @@ public class Player {
     this.x = Math.random();
     this.y = Math.random();
     this.infected = false;
+    this.status = PlayerStatus.WAITING;
   }
 
   public String getName() {

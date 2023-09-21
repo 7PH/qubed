@@ -13,6 +13,7 @@ public class GameState {
   public static Map<Integer, PlayerInput> PLAYER_INPUTS = new ConcurrentHashMap<>();
   public static GameStatus GAME_STATUS = GameStatus.PENDING;
   public static AtomicInteger atomicInteger = new AtomicInteger();
+  public static long gameStartTime = 0;
 
   public static void addPlayer(Player player, Session session) {
     PLAYERS.put(player, session);
@@ -27,13 +28,25 @@ public class GameState {
   }
 
   public static void start() {
-    clean();
-    GAME_STATUS = GameStatus.RUNNING;
-    positionPlayers();
+    if (canStartTheGame()) {
+      GAME_STATUS = GameStatus.RUNNING;
+      positionPlayers();
+      gameStartTime = System.currentTimeMillis();
+    }
+  }
+
+  public static boolean canStartTheGame() {
+    return numberOfPlayer() > 2;
+  }
+
+  private static int numberOfPlayer() {
+    return PLAYERS.keySet().size();
   }
 
   public static void clean() {
+    GAME_STATUS = GameStatus.PENDING;
     PLAYERS.keySet().forEach(Player::clean);
+    gameStartTime = 0;
   }
 
   public static void positionPlayers() {
@@ -46,4 +59,5 @@ public class GameState {
 
     }
   }
+
 }

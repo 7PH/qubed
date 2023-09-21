@@ -2,6 +2,5 @@ package org.contamination;
 
 public enum PlayerStatus {
   READY,
-  WAITING,
-  PLAYING
+  WAITING
 }

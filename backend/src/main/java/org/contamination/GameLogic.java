@@ -2,7 +2,11 @@ package org.contamination;
 
 import com.google.gson.Gson;
 import java.util.List;
+import java.util.Random;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static javax.swing.UIManager.get;
 import static org.contamination.CollisionDetector.getPlayerCollisions;
 
 public class GameLogic implements Runnable {
@@ -10,23 +14,54 @@ public class GameLogic implements Runnable {
   private static final double SPEED = 0.01;
   public static final double SIZE_OF_THE_SPRITE = 0.02;
   private static final long FRAME_RATE = 1000;
+  private static final long TIME_BEFORE_INFECTION = 5000;
 
   @Override
   public void run() {
 
+
     while (true) {
+      if (numberOfNonInfectedPlayers() <= 1) {
+        GameState.clean();
+      }
+
       if (GameState.GAME_STATUS == GameStatus.RUNNING) {
         calculateNewPositions();
+        if (isZeroInfectedPlayer() && isReadyToInfectTime()) {
+          randomlyInfectOnePlayer();
+        }
       }
+
       try {
         Thread.sleep(FRAME_RATE);
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
       sendState();
-
     }
 
+  }
+
+  private static void randomlyInfectOnePlayer() {
+    List<Player> players = GameState.PLAYERS.keySet().stream().toList();
+    Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size()));
+    System.out.println("Infecting player " + player.getName());
+    player.setInfected(true);
+  }
+
+  private static boolean isReadyToInfectTime() {
+    return System.currentTimeMillis() - GameState.gameStartTime >= TIME_BEFORE_INFECTION;
+  }
+
+  private static boolean isZeroInfectedPlayer() {
+    return GameState.PLAYERS.keySet().stream()
+      .noneMatch(Player::isInfected);
+  }
+
+  private long numberOfNonInfectedPlayers() {
+    return GameState.PLAYERS.keySet().stream()
+      .filter(player -> !player.isInfected())
+      .count();
   }
 
   private void calculateNewPositions() {
@@ -41,22 +76,13 @@ public class GameLogic implements Runnable {
     double oldY = player.getY();
     double step = SPEED;
 
-    double newX = oldX, newY = oldY;
-
-    if (playerInput.up) {
-      newY = Math.min(oldY + step, 1);
-    }
-    if (playerInput.down) {
-      newY = Math.max(oldY - step, 0);
-    }
-    if (playerInput.right) {
-      newX = Math.min(oldX + step, 1);
-    }
-    if (playerInput.left) {
-      newX = Math.max(oldX - step, 0);
-    }
+    double x = (playerInput.right ? step : 0) + (playerInput.left ? -step : 0);
+    double y = (playerInput.up ? step : 0) + (playerInput.down ? -step : 0);
+    double newX = min(max(oldX+x, 0), 1);
+    double newY = min(max(oldY+y, 0), 1);
 
     List<Player> playerCollisions = getPlayerCollisions(player);
+    System.out.println("Colliding with " + playerCollisions.size() + " players");
 
     if (playerCollisions.stream().anyMatch(Player::isInfected)) {
       player.setInfected(true);
