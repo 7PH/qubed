@@ -27,6 +27,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 h1 {
@@ -69,7 +70,6 @@ input::placeholder {
 }
 
 #app {
-  padding: 20px;
   width: 100%;
   margin: 0 auto;
   text-align: center;
