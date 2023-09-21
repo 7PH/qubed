@@ -1,24 +1,31 @@
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { GameState, Player } from "../types";
+import { GameObject, GameState, Player } from "../types";
 
 const PORT = 8080;
 
 enum OutboundMessageType {
   Start = "start",
   Commands = "commands",
+  Ready = "ready",
 }
 
 enum InboundMessageType {
-  StateUpdate = "game_state",
+  StateUpdate = "GAME_STATE",
+  Connected = "CONNECTED",
 }
 
-export let gameState: Player[];
+export let gameState: GameObject = {
+  playerId: 0,
+  players: [],
+};
 export let sendCommands: <T>(content: T) => void;
+export let closeConnection: () => void;
 
 export function useWebSocket() {
   const connection = ref<WebSocket | undefined>(undefined);
   const playerList = ref<Player[]>([]);
+  const playerId = ref<number>(0);
 
   const route = useRoute();
 
@@ -30,13 +37,8 @@ export function useWebSocket() {
     );
     connection.value = socket;
 
-    // socket.addEventListener("open", (_event) => {
-    //   socket.send("Hello Server!");
-    // });
-
     // Listen for messages
     socket.addEventListener("message", (event) => {
-      console.log("Message from server ", event.data);
       handleMessage(JSON.parse(event.data));
     });
 
@@ -56,21 +58,23 @@ export function useWebSocket() {
         })
       );
     };
-  });
 
-  onUnmounted(() => {
-    connection.value?.close();
+    closeConnection = function () {
+      socket.close();
+    };
   });
 
   function handleMessage(data: any) {
-    handleStateUpdate(data);
-    // switch (data.type) {
-    //   case InboundMessageType.StateUpdate:
-    //     handleStateUpdate(data.content);
-    //     break;
-    //   default:
-    //     console.warn(`Unknown message type received: ${data.type}`);
-    // }
+    switch (data.type) {
+      case InboundMessageType.StateUpdate:
+        handleStateUpdate(data.content);
+        break;
+      case InboundMessageType.Connected:
+        handleConnected(data.content);
+        break;
+      default:
+        console.warn(`Unknown message type received: ${data.type}`);
+    }
   }
 
   function handleStateUpdate(data: {
@@ -80,8 +84,13 @@ export function useWebSocket() {
     if (data.gameState === GameState.PENDING) {
       playerList.value = data.players;
     } else {
-      gameState = playerList.value;
+      gameState.players = playerList.value;
     }
+  }
+
+  function handleConnected(data: { id: number }) {
+    playerId.value = data.id;
+    gameState.playerId = data.id;
   }
 
   function startGame() {
@@ -90,5 +99,14 @@ export function useWebSocket() {
     );
   }
 
-  return { playerList, startGame };
+  function setReady() {
+    connection.value?.send(
+      JSON.stringify({
+        type: OutboundMessageType.Ready,
+        content: "",
+      })
+    );
+  }
+
+  return { playerId, playerList, setReady, startGame };
 }
