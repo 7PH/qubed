@@ -21,7 +21,7 @@ const { container } = useGameRenderer();
 }
 
 .game-container > div {
-  max-width: 800px;
+  max-height: 1200px;
   aspect-ratio: 1 / 1;
   flex-grow: 1;
   overflow: hidden;

@@ -5,8 +5,8 @@ const FULL_CIRCLE = 2 * Math.PI;
 const BOUNDARY_COLOR = "#aed4eb";
 const BOUNDARY_WIDTH = 4;
 
-const PLAYER_USERNAME_FONT_SIZE = 1.5 / 100; // % of canvas width
-const PLAYER_SIZE = 1 / 100; // % of canvas width
+const PLAYER_USERNAME_FONT_SIZE = 1.8 / 100; // % of canvas width
+const PLAYER_SIZE = 1.5 / 100; // % of canvas width
 const PLAYER_SANE_FILL_COLOR = "#78eb7b";
 const PLAYER_SANE_STROKE_COLOR = "#169119";
 const PLAYER_INFECTED_FILL_COLOR = "#f26179";
