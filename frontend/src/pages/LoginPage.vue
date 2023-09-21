@@ -1,13 +1,20 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
+import { useWebSocket } from '../hooks/websocket';
 
 const router = useRouter()
+const { disconnect } = useWebSocket()
 const username = ref("");
+
 
 function handleEnter() {
  router.push(`/waiting?name=${username.value}`) 
 }
+
+onMounted(() => {
+  disconnect()
+})
 </script>
 
 <template>
