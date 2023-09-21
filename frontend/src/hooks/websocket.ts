@@ -40,7 +40,7 @@ export function useWebSocket() {
     const playername = route.query.name ?? "incognito";
 
     const socket = new WebSocket(
-      `${WS_PROTOCOL}://${document.location.host}:${PORT}/websocket/${playername}`
+      `${WS_PROTOCOL}://${document.location.hostname}:${PORT}/websocket/${playername}`
     );
     connection.value = socket;
     connectionReference = socket;
