@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const username = ref("");
 
-function handleEnter(e) {
-  console.log();
+function handleEnter() {
+ router.push(`/waiting?name=${username.value}`) 
 }
 </script>
 
