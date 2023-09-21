@@ -9,7 +9,7 @@ public class GameLogic implements Runnable {
 
   private static final double SPEED = 0.01;
   public static final double SIZE_OF_THE_SPRITE = 0.02;
-  private static final long FRAME_RATE = 20;
+  private static final long FRAME_RATE = 1000;
 
   @Override
   public void run() {
@@ -41,7 +41,7 @@ public class GameLogic implements Runnable {
     double oldY = player.getY();
     double step = SPEED;
 
-    double newX = 0.0, newY = 0.0;
+    double newX = oldX, newY = oldY;
 
     if (playerInput.up) {
       newY = Math.min(oldY + step, 1);
