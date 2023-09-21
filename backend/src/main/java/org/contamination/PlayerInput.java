@@ -1,8 +1,8 @@
 package org.contamination;
 
 public class PlayerInput {
-  Boolean up;
-  Boolean left;
-  Boolean right;
-  Boolean down;
+  Boolean up = false;
+  Boolean left = false;
+  Boolean right = false;
+  Boolean down = false;
 }
