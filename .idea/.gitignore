@@ -1,0 +1,15 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+.idea/
+/modules/backend.main.iml
+/modules/backend.test.iml
+/compiler.xml
+/contamination-game-qdc2.iml
+/gradle.xml
+/libraries/*
+/jarRepositories.xml
+/misc.xml
+/modules.xml
+/vcs.xml
