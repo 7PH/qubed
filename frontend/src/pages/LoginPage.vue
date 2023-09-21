@@ -18,12 +18,12 @@ function handleEnter(e) {
     <h1>Welcome to 'Qubed'</h1>
     
 
-      <hr/>
+      <hr style="border-color: pink"/>
 
       <h3>Rules:</h3>
 
       <span>This game is simple! <br style="margin-top:8px"/> When it starts, one "Qubed" will be randomly chosen. His goal is to make all other guys "Qubed" too, while other players need to run away. The game ends, when only one "non-qubed" player is left, who is the winner.</span>
-      <hr/>
+      <hr  style="border-color: pink"/>
 
 
     <input style="margin-top: 50px" type="text" id="username" placeholder="Enter a username and press enter" v-model="username" @keyup.enter="handleEnter">
