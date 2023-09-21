@@ -33,6 +33,9 @@ public class HelloWorld {
   }
 
   private static void createNewThread() {
-//    new Thread(runnable).setDaemon(true);
+    GameLogic gameLogic = new GameLogic();
+    Thread thread = new Thread(gameLogic);
+    thread.setDaemon(true);
+    thread.start();
   }
 }

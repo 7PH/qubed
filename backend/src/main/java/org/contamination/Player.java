@@ -5,8 +5,8 @@ public class Player {
   private String id;
   private boolean affected;
   private PlayerStatus status;
-  private int x;
-  private int y;
+  private float x;
+  private float y;
 
   public Player(String name) {
     this.name = name;
@@ -44,19 +44,19 @@ public class Player {
     this.status = status;
   }
 
-  public int getX() {
+  public float getX() {
     return x;
   }
 
-  public void setX(int x) {
+  public void setX(float x) {
     this.x = x;
   }
 
-  public int getY() {
+  public float getY() {
     return y;
   }
 
-  public void setY(int y) {
+  public void setY(float y) {
     this.y = y;
   }
 
