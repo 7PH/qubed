@@ -12,6 +12,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import static org.contamination.GameState.SESSION_IDS_PLAYERS;
 import static org.contamination.GameState.addPlayer;
+import static org.contamination.GameState.removePlayer;
 import static org.contamination.PlayerStatus.READY;
 
 @ServerEndpoint(value = "/websocket/{username}")
@@ -38,7 +39,7 @@ public class Endpoint {
 
   @OnClose
   public void onClose(Session session) throws IOException {
-    // WebSocket connection closes
+    removePlayer(session);
   }
 
   @OnError

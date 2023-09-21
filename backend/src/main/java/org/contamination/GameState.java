@@ -17,6 +17,12 @@ public class GameState {
     SESSION_IDS_PLAYERS.put(session.getId(), player);
   }
 
+  public static void removePlayer(Session session) {
+    Player playerToRemove = SESSION_IDS_PLAYERS.get(session.getId());
+    PLAYERS.remove(playerToRemove);
+    SESSION_IDS_PLAYERS.remove(session.getId());
+  }
+
   public static Optional<Player> getPlayer(String playerId) {
     return PLAYERS.keySet().stream()
       .filter(player -> player.getId().equals(playerId))
