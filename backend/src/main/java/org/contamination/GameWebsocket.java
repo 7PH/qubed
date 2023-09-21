@@ -19,11 +19,11 @@ import static org.contamination.PlayerStatus.READY;
 @ServerEndpoint(value = "/websocket/{username}")
 public class GameWebsocket {
 
-  GameState gameState = new GameState();
-
   @OnOpen
   public void onOpen(Session session, @PathParam("username") String username) throws IOException {
-    addPlayer(new Player(username), session);
+    Player player = new Player(username);
+    addPlayer(player, session);
+    session.getBasicRemote().sendText(new Gson().toJson(new ConnectedMessage("CONNECTED", player.getId())));
   }
 
   @OnMessage
