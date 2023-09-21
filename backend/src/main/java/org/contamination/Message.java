@@ -1,4 +1,6 @@
 package org.contamination;
 
-public record Message(String type, String content) {
+import com.google.gson.JsonObject;
+
+public record Message(String type, JsonObject content) {
 }
