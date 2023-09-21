@@ -1,4 +1,4 @@
-import { Player } from "../types";
+import { GameObject, Player } from "../types";
 
 const FULL_CIRCLE = 2 * Math.PI;
 
@@ -78,8 +78,8 @@ export function drawGameBoundaries(
 export function drawGame(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
-  players: Player[]
+  gameState: GameObject
 ) {
   drawGameBoundaries(canvas, context);
-  drawPlayers(canvas, context, players);
+  drawPlayers(canvas, context, gameState.players);
 }

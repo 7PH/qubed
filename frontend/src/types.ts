@@ -15,3 +15,5 @@ export enum GameState {
   PENDING = "pending",
   RUNNING = "running",
 }
+
+export type GameObject = { playerId: number; players: Player[] };

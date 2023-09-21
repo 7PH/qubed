@@ -1,26 +1,8 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { Player } from "../types";
 import { resizeCanvas } from "../utils/canvas";
 import { drawGame } from "../utils/draw";
 import { useArrowKeys } from "./useArrowKeys";
-import { sendCommands } from "./websocket";
-
-const DUMMY_PLAYERS: Player[] = [
-  {
-    id: 123,
-    name: "Player 1",
-    position: [0.5, 0.5],
-    infected: false,
-    ready: true,
-  },
-  {
-    id: 123,
-    name: "Player 2",
-    position: [0.67, 0.55],
-    infected: true,
-    ready: true,
-  },
-];
+import { gameState, sendCommands } from "./websocket";
 
 export const useGameRenderer = () => {
   // Ticking logic
@@ -73,7 +55,7 @@ export const useGameRenderer = () => {
     }
 
     contextRef.value.reset();
-    drawGame(canvasRef.value, contextRef.value, DUMMY_PLAYERS);
+    drawGame(canvasRef.value, contextRef.value, gameState);
 
     ticking.value && requestAnimationFrame(tick);
   }

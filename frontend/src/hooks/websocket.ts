@@ -1,6 +1,6 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { GameState, Player } from "../types";
+import { GameObject, GameState, Player } from "../types";
 
 const PORT = 8080;
 
@@ -15,7 +15,7 @@ enum InboundMessageType {
   Connected = "CONNECTED",
 }
 
-export let gameState: { playerId: number; players: Player[] } = {
+export let gameState: GameObject = {
   playerId: 0,
   players: [],
 };
