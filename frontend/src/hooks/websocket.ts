@@ -1,6 +1,6 @@
-import { ref, onMounted, onUnmounted } from "vue";
-import { GameState, Player } from "../types";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { GameState, Player } from "../types";
 
 const PORT = 8080;
 
@@ -13,8 +13,8 @@ enum InboundMessageType {
   StateUpdate = "game_state",
 }
 
-export let gameState: any;
-export let sendCommands: any;
+export let gameState: Player[];
+export let sendCommands: <T>(content: T) => void;
 
 export function useWebSocket() {
   const connection = ref<WebSocket | undefined>(undefined);
@@ -48,7 +48,7 @@ export function useWebSocket() {
       console.warn("connection closed");
     });
 
-    sendCommands = function (content: string) {
+    sendCommands = function <T>(content: T) {
       socket.send(
         JSON.stringify({
           type: OutboundMessageType.Commands,
@@ -80,7 +80,7 @@ export function useWebSocket() {
     if (data.gameState === GameState.PENDING) {
       playerList.value = data.players;
     } else {
-      gameState = playerList;
+      gameState = playerList.value;
     }
   }
 
