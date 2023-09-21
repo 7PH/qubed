@@ -1,4 +1,4 @@
 package org.contamination;
 
-public record ReplyMessage(String type, Object contents) {
+public record ReplyMessage(String type, Object content) {
 }
