@@ -1,16 +1,39 @@
 <script setup lang="ts">
 import { PlayerStatus } from "../types";
 import { useWebSocket } from "../hooks/websocket";
+import { computed, onMounted } from "vue";
 
-const { playerId, playerList, setReady } = useWebSocket();
+const { playerId, playerList, connect, disconnect, setReady, startGame } =
+  useWebSocket();
+
+onMounted(() => {
+  disconnect(); // disconnect if possible
+  connect();
+});
 
 function handleReadyClick() {
   setReady();
 }
+
+function handleStart() {
+  startGame();
+}
+
+const everyoneReady = computed(
+  () =>
+    playerList.value.length > 0 &&
+    playerList.value.every((p) => p.status === PlayerStatus.Ready)
+);
 </script>
 
 <template>
   <div class="layout">
+    <div>
+      <button :disabled="!everyoneReady" @click="handleStart">
+        Start the game!
+      </button>
+    </div>
+
     <table class="playerlist">
       <thead>
         <tr>
