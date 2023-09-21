@@ -10,6 +10,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import static org.contamination.GameState.PLAYER_INPUTS;
 import static org.contamination.GameState.SESSION_IDS_PLAYERS;
 import static org.contamination.GameState.addPlayer;
 import static org.contamination.GameState.removePlayer;
@@ -26,18 +27,33 @@ public class GameWebsocket {
   }
 
   @OnMessage
-  public void onMessage(Session session, String message) throws IOException {
+  public void onMessage(Session session, String message) {
 
     Message msg = new Gson().fromJson(message, Message.class);
+    Player player = SESSION_IDS_PLAYERS.get(session.getId());
     switch (msg.type()) {
-      case "ready":
-        Player player = SESSION_IDS_PLAYERS.get(session.getId());
-        player.setStatus(READY);
-        break;
-      case "start":
-        GameState.start();
+      case "ready" -> player.setStatus(READY);
+      case "start" -> GameState.start();
+      case "commands" -> handlePlayerInputChange(player, msg);
     }
 
+  }
+
+  private void handlePlayerInputChange(Player player, Message msg) {
+    PlayerInput playerInputChange = new Gson().fromJson(msg.content(), PlayerInput.class);
+    PlayerInput playerInput = PLAYER_INPUTS.get(player.getId());
+    if (playerInputChange.down != null) {
+      playerInput.down = playerInputChange.down;
+    }
+    if (playerInputChange.up != null) {
+      playerInput.up = playerInputChange.up;
+    }
+    if (playerInputChange.right != null) {
+      playerInput.right = playerInputChange.right;
+    }
+    if (playerInputChange.left != null) {
+      playerInput.left = playerInputChange.left;
+    }
   }
 
   @OnClose

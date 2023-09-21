@@ -4,15 +4,17 @@ import com.google.gson.Gson;
 
 public class GameLogic implements Runnable {
 
-  private static double SPEED = 0.01;
-  private static double SIZE_OF_THE_SPRITE = 0.02;
-  private static long FRAME_RATE = 20;
+  private static final double SPEED = 0.01;
+  private static final double SIZE_OF_THE_SPRITE = 0.02;
+  private static final long FRAME_RATE = 20;
 
   @Override
   public void run() {
 
     while (true) {
-      calculateNewPositions();
+      if (GameState.GAME_STATUS == GameStatus.RUNNING) {
+        calculateNewPositions();
+      }
       try {
         Thread.sleep(FRAME_RATE);
       } catch (Exception e) {
@@ -82,7 +84,7 @@ public class GameLogic implements Runnable {
 
 
   public void sendState() {
-    GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS, GameState.PLAYERS.keySet().stream().toList());
+    GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS.name().toLowerCase(), GameState.PLAYERS.keySet().stream().toList());
     String messageString = new Gson().toJson(gameStateMessage);
     System.out.println(messageString);
     GameState.PLAYERS.values().forEach(

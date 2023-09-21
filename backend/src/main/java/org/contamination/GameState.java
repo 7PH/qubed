@@ -1,7 +1,6 @@
 package org.contamination;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.websocket.Session;
@@ -10,7 +9,7 @@ public class GameState {
   public static Map<Player, Session> PLAYERS = new ConcurrentHashMap<>();
   public static Map<String, Player> SESSION_IDS_PLAYERS = new ConcurrentHashMap<>();
   public static Map<Integer, PlayerInput> PLAYER_INPUTS = new ConcurrentHashMap<>();
-  public static String GAME_STATUS;
+  public static GameStatus GAME_STATUS = GameStatus.PENDING;
   public static AtomicInteger atomicInteger = new AtomicInteger();
 
   public static void addPlayer(Player player, Session session) {
@@ -25,14 +24,7 @@ public class GameState {
     SESSION_IDS_PLAYERS.remove(session.getId());
   }
 
-  public static Optional<Player> getPlayer(String playerId) {
-    return PLAYERS.keySet().stream()
-      .filter(player -> player.getId().equals(playerId))
-      .findFirst();
-  }
-
-
   public static void start() {
-    GAME_STATUS = "running";
+    GAME_STATUS = GameStatus.RUNNING;
   }
 }
