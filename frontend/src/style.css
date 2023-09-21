@@ -25,12 +25,9 @@ a:hover {
 
 body {
   margin: 0;
-<<<<<<< Updated upstream
-=======
   min-width: 320px;
   min-height: 100vh;
   overflow: hidden;
->>>>>>> Stashed changes
 }
 
 h1 {
