@@ -25,7 +25,7 @@ onMounted(disconnect);
   <div class="layout">
     <div class="winner">
       <h2>Congrats {{winner.toUpperCase()}}, <br/> you won!</h2>
-      <iframe src="https://giphy.com/embed/2gtoSIzdrSMFO" width="120" height="90" frameBorder="0" ></iframe>
+      <iframe title="winner" src="https://giphy.com/embed/2gtoSIzdrSMFO" width="120" height="90" frameBorder="0" ></iframe>
     </div>
     <div class="scoreboard">
         <div class="row header-row">
@@ -60,6 +60,7 @@ onMounted(disconnect);
   border: 1px solid pink;
   border-radius: 4px;
   height: 70vb;
+  /* background-color: var(--background-secondary); */
 }
 
 .row {
@@ -70,6 +71,7 @@ onMounted(disconnect);
 
 .header-row {
   position: sticky;
+  background-color: var(--background-secondary);
   top: 0;
 }
 

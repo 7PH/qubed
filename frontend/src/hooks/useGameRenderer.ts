@@ -1,3 +1,4 @@
+import JSConfetti from "js-confetti";
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { resizeCanvas } from "../utils/canvas";
 import { drawGame } from "../utils/draw";
@@ -15,6 +16,8 @@ export const useGameRenderer = () => {
 
   // Keyboard state
   useArrowKeys(sendCommands);
+
+  const finishCheck = useGameFinish();
 
   // Use ResizeObserver to detect when container size changes
   const observer = new ResizeObserver(() => {
@@ -56,9 +59,26 @@ export const useGameRenderer = () => {
 
     contextRef.value.reset();
     drawGame(canvasRef.value, contextRef.value, gameState);
+    finishCheck();
 
     ticking.value && requestAnimationFrame(tick);
   }
 
   return { container: containerRef };
 };
+
+function useGameFinish() {
+  const finished = ref(false);
+
+  function finishCheck() {
+    if (gameState.gameFinished && !finished.value) {
+      finished.value = true;
+
+      setTimeout(() => {
+        new JSConfetti().addConfetti();
+      }, 500);
+    }
+  }
+
+  return finishCheck;
+}
