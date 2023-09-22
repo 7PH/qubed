@@ -1,15 +1,15 @@
 package org.contamination;
 
-import java.util.Objects;
-
 public final class PlayerStats {
 
   private int numberOfInfectedPeople;
   private long survivalTime;
+  private long score;
 
-  public PlayerStats(int numberOfInfectedPeople, long survivalTime) {
+  public PlayerStats(int numberOfInfectedPeople, long survivalTime, long score) {
     this.numberOfInfectedPeople = numberOfInfectedPeople;
     this.survivalTime = survivalTime;
+    this.score = score;
   }
 
   public int numberOfInfectedPeople() {
@@ -32,24 +32,12 @@ public final class PlayerStats {
     this.survivalTime = survivalTime;
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) return true;
-    if (obj == null || obj.getClass() != this.getClass()) return false;
-    var that = (PlayerStats) obj;
-    return this.numberOfInfectedPeople == that.numberOfInfectedPeople &&
-      this.survivalTime == that.survivalTime;
+  public long getScore() {
+    return score;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(numberOfInfectedPeople, survivalTime);
+  public void setScore(long score) {
+    this.score = score;
   }
 
-  @Override
-  public String toString() {
-    return "PlayerStats[" +
-      "numberOfInfectedPeople=" + numberOfInfectedPeople + ", " +
-      "survivalTime=" + survivalTime + ']';
-  }
 }

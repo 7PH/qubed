@@ -34,7 +34,7 @@ public class Player {
     this.id = GameState.atomicInteger.getAndIncrement();
     this.x = Math.random();
     this.y = Math.random();
-    this.playerStats = new PlayerStats(0, 0);
+    this.playerStats = new PlayerStats(0, 0, 0);
     this.velX = 0;
     this.velY = 0;
     this.accX = 0;

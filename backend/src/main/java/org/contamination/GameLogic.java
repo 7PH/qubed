@@ -60,6 +60,7 @@ public class GameLogic implements Runnable {
 
   private static void finishGame() {
     GameState.GAME_STATUS = GameStatus.FINISHED;
+    ScoreCalculator.setPlayerScores();
     GameState.clean();
   }
 
