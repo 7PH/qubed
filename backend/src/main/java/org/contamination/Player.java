@@ -8,12 +8,15 @@ public class Player {
   private double x;
   private double y;
 
+  private PlayerStats playerStats;
+
   public Player(String name) {
     this.name = name;
     this.status = PlayerStatus.WAITING;
     this.id = GameState.atomicInteger.getAndIncrement();
     this.x = Math.random();
     this.y = Math.random();
+    this.playerStats = new PlayerStats(0, 0);
   }
 
   public void clean() {
@@ -71,4 +74,11 @@ public class Player {
     this.y = y;
   }
 
+  public PlayerStats getPlayerStats() {
+    return playerStats;
+  }
+
+  public void setPlayerStats(PlayerStats playerStats) {
+    this.playerStats = playerStats;
+  }
 }

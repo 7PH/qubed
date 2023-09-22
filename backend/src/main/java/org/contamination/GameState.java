@@ -61,4 +61,8 @@ public class GameState {
     }
   }
 
+  public static Player getPlayerById(Integer id) {
+    return GameState.PLAYERS.keySet().stream().filter(p -> p.getId().equals(id)).findFirst().get();
+  }
+
 }

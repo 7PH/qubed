@@ -20,16 +20,12 @@ public class GameAwesomeStats {
 
   public void onPlayerInfected(Integer idOfInfectedPlayer, Integer idOfInfectingPlayer) {
     survivalTimes.put(idOfInfectedPlayer, System.currentTimeMillis() - gameStart);
+    Player player = GameState.getPlayerById(idOfInfectedPlayer);
+    player.getPlayerStats().setSurvivalTime(survivalTimes.get(player.getId()));
     if(idOfInfectingPlayer != null) {
       numberOfInfectedPeople.compute(idOfInfectingPlayer, (a, b) -> b + 1);
+      player = GameState.getPlayerById(idOfInfectingPlayer);
+      player.getPlayerStats().setNumberOfInfectedPeople(numberOfInfectedPeople.get(player.getId()));
     }
-  }
-
-  public Map<Integer, Long> getSurvivalTimes() {
-    return survivalTimes;
-  }
-
-  public Map<Integer, Integer> getNumberOfInfectedPeople() {
-    return numberOfInfectedPeople;
   }
 }
