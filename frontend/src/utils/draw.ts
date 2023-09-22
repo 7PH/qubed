@@ -19,15 +19,17 @@ const PLAYER_INFECTED_SHAKE_AMPLITUDE = 0.1 / 100; // % of canvas width
 export function drawPlayerCircle(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
-  player: Player,
+  player: Player
 ) {
   let realX = player.x * canvas.width;
   let realY = player.y * canvas.height;
   const realRadius = PLAYER_SIZE * canvas.width;
 
   if (player.infected) {
-    realX += canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
-    realY += canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
+    realX +=
+      canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
+    realY +=
+      canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
   }
 
   context.strokeStyle = player.infected
@@ -62,7 +64,11 @@ export function drawPlayerUsername(
     : PLAYER_SANE_FILL_COLOR;
   context.font = `${realFontSize}px Arial`;
   context.textAlign = "center";
-  context.fillText(`${isLocalPlayer ? '⭐' : ''}${player.name}`, realX, realY - realRadius / 2 - realFontSize);
+  context.fillText(
+    `${isLocalPlayer ? "⭐" : ""}${player.name}`,
+    realX,
+    realY - realRadius / 2 - realFontSize
+  );
 }
 
 /**
@@ -73,9 +79,18 @@ export function drawPlayers(
   context: CanvasRenderingContext2D,
   gameObject: GameObject
 ) {
-  gameObject.players.forEach(player => drawPlayerCircle(canvas, context, player));
+  gameObject.players.forEach((player) =>
+    drawPlayerCircle(canvas, context, player)
+  );
   // Draw usernames afterwards so they are on top of circles
-  gameObject.players.forEach(player => drawPlayerUsername(canvas, context, player, player.id === gameObject.playerId));
+  gameObject.players.forEach((player) =>
+    drawPlayerUsername(
+      canvas,
+      context,
+      player,
+      player.id === gameObject.playerId
+    )
+  );
 }
 
 /**
@@ -93,6 +108,7 @@ export function drawGameBoundaries(
 export function drawGameFinished(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
+  winner: string
 ) {
   context.fillStyle = "rgba(0, 0, 0, 0.5)";
   context.fillRect(0, 0, canvas.width, canvas.height);
@@ -105,7 +121,11 @@ export function drawGameFinished(
   context.fillStyle = "white";
   context.font = "bold 1.5rem Arial";
   context.textAlign = "center";
-  context.fillText(`Winner: ${'????'}`, canvas.width / 2, canvas.height / 2 + 30);
+  context.fillText(
+    `Winner: ${winner}`,
+    canvas.width / 2,
+    canvas.height / 2 + 30
+  );
 }
 
 /**
@@ -119,6 +139,8 @@ export function drawGame(
   drawGameBoundaries(canvas, context);
   drawPlayers(canvas, context, gameObject);
   if (gameObject.gameFinished) {
-    drawGameFinished(canvas, context);
+    const winner =
+      gameObject.players.find((player) => !player.infected)?.name || "";
+    drawGameFinished(canvas, context, winner);
   }
 }

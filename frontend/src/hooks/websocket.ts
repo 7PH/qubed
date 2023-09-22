@@ -97,6 +97,7 @@ export function useWebSocket() {
 
       setTimeout(() => {
         router.push(`/scoreboard?name=${playername}`);
+        gameState.gameFinished = false;
       }, GAME_END_DELAY);
     } else if (data.gameState === GameState.RUNNING) {
       gameState.players = data.players;
