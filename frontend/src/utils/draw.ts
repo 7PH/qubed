@@ -137,10 +137,28 @@ export function drawGameFinished(
 export function drawGame(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
-  gameObject: GameObject
+  gameObject: GameObject,
+  initialized: boolean,
+  images: HTMLImageElement[]
 ) {
   drawGameBoundaries(canvas, context);
   drawPlayers(canvas, context, gameObject);
+  if (initialized) {
+    context.drawImage(
+      images[0],
+      canvas.width / 80,
+      canvas.height / 80,
+      canvas.width / 5,
+      canvas.width / 5
+    );
+    context.drawImage(
+      images[0],
+      canvas.width / 2,
+      canvas.height / 2,
+      canvas.width / 5,
+      canvas.width / 5
+    );
+  }
   if (gameObject.gameFinished) {
     const winner =
       gameObject.players.find(

@@ -2,6 +2,7 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { resizeCanvas } from "../utils/canvas";
 import { drawGame } from "../utils/draw";
 import { useArrowKeys } from "./useArrowKeys";
+import { useGameInitialize } from "./useGameInitialize";
 import { gameState, sendCommands } from "./websocket";
 
 export const useGameRenderer = () => {
@@ -15,6 +16,8 @@ export const useGameRenderer = () => {
 
   // Keyboard state
   useArrowKeys(sendCommands);
+
+  const { initialized, images } = useGameInitialize();
 
   // Use ResizeObserver to detect when container size changes
   const observer = new ResizeObserver(() => {
@@ -55,7 +58,13 @@ export const useGameRenderer = () => {
     }
 
     contextRef.value.reset();
-    drawGame(canvasRef.value, contextRef.value, gameState);
+    drawGame(
+      canvasRef.value,
+      contextRef.value,
+      gameState,
+      initialized.value,
+      images
+    );
 
     ticking.value && requestAnimationFrame(tick);
   }

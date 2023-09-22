@@ -2,6 +2,7 @@
 import { useEndGameConfetti } from "../hooks/useEndGameConfetti";
 import { useGameRenderer } from "../hooks/useGameRenderer";
 
+
 const { container } = useGameRenderer();
 useEndGameConfetti();
 </script>
