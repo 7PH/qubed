@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { gameState } from "../hooks/websocket";
+import { connectionReference, gameState } from "../hooks/websocket";
 import { formatSurvivalTime, sortPlayers } from "../utils/score";
 
 const router = useRouter();
@@ -12,6 +12,10 @@ const players = computed(() => sortPlayers(gameState.players));
 const goBackToWaitingRoom = () => {
   router.push(`/waiting?name=${route.query.name}`);
 };
+
+if (!connectionReference) {
+  route.query.name ?  goBackToWaitingRoom() : router.push('/') 
+}
 </script>
 
 <template>
