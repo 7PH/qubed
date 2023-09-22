@@ -62,7 +62,7 @@ public class GameLogic implements Runnable {
   private static void randomlyInfectOnePlayer() {
     List<Player> players = GameState.PLAYERS.keySet().stream().toList();
     Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size()));
-    player.setHealth(PlayerHealth.INFECTED);
+    player.infect();
     GameState.gameStats.onPlayerInfected(player.getId(), null);
   }
 

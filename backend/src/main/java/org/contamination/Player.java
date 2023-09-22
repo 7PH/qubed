@@ -12,6 +12,7 @@ public class Player {
   public Player(String name) {
     this.name = name;
     this.status = PlayerStatus.WAITING;
+    this.health = PlayerHealth.HEALTHY;
     this.id = GameState.atomicInteger.getAndIncrement();
     this.x = Math.random();
     this.y = Math.random();
