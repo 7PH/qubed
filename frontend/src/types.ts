@@ -9,6 +9,11 @@ export enum PlayerHealth {
   Contagious = "CONTAGIOUS",
 }
 
+export type PlayerStats = {
+  numberOfInfectedPeople: number;
+  survivalTime: number;
+};
+
 export type Player = {
   id: number;
   name: string;
@@ -16,6 +21,7 @@ export type Player = {
   health: PlayerHealth;
   x: number;
   y: number;
+  playerStats: PlayerStats;
 };
 
 export enum GameState {

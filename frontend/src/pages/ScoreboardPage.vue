@@ -1,50 +1,64 @@
 <script lang="ts" setup>
-import { useRoute, useRouter } from 'vue-router';
-import { gameState } from '../hooks/websocket';
+import { useRoute, useRouter } from "vue-router";
+import { gameState } from "../hooks/websocket";
+import { computed } from "vue";
+import { formatSurvivalTime } from "../utils/score";
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
-const mockedUsers = Array.from({ length: 20}).map((_, index) => ({
-  name: `Player${index +1}`,
-  place: index + 1
-}))
-const winner = gameState.players.find((player) => !player.infected)?.name || '';
+const playerList = computed(() =>
+  gameState.players
+    .slice(0)
+    .sort((p1, p2) => p1.playerStats.survivalTime - p2.playerStats.survivalTime)
+);
 
 const goBackToWaitingRoom = () => {
-  router.push(`/waiting?name=${route.query.name}`)
-}
-
+  router.push(`/waiting?name=${route.query.name}`);
+};
 </script>
 
 <template>
   <div class="layout">
     <div class="winner">
-      <h2>Congrats {{winner.toUpperCase()}}, <br/> you won!</h2>
-      <iframe title="winner" src="https://giphy.com/embed/2gtoSIzdrSMFO" width="120" height="90" frameBorder="0" ></iframe>
+      <h2>
+        Congrats <strong>{{ playerList[0].name }}</strong
+        >, <br />
+        you won!
+      </h2>
+      <iframe
+        title="winner"
+        src="https://giphy.com/embed/2gtoSIzdrSMFO"
+        width="120"
+        height="90"
+        frameBorder="0"
+      ></iframe>
     </div>
     <div class="scoreboard">
-        <div class="row header-row">
-          <div class="column">
-            <strong>Name</strong>
-          </div>
-          <div class="column">
-            <strong>Place</strong>
-          </div>
+      <div class="row header-row">
+        <div class="column">
+          <strong>Name</strong>
         </div>
+        <div class="column">
+          <strong>Place</strong>
+        </div>
+      </div>
 
-        <div class="row" v-for="(user) in mockedUsers">
-          <div class="column">{{user.name}}</div>
-          <div class="column">{{user.place}}</div>
+      <div class="row" v-for="player in gameState.players">
+        <div class="column">{{ player.name }}</div>
+        <div class="column">
+          {{ formatSurvivalTime(player.playerStats.survivalTime) }}
         </div>
+      </div>
     </div>
 
-    <button class="wait-btn w-100" @click="goBackToWaitingRoom">Go to waiting room</button>
+    <button class="wait-btn w-100" @click="goBackToWaitingRoom">
+      Go to waiting room
+    </button>
   </div>
 </template>
 
 <style scoped>
-
 .winner {
   display: flex;
   justify-content: space-around;
