@@ -9,15 +9,15 @@ export function useGameInitialize() {
     images.value = await loadImages([
       {
         name: "bush",
-        src: "public/bush.png",
+        src: "bush.png",
       },
       {
         name: "bush2",
-        src: "public/bush2.png",
+        src: "bush2.png",
       },
       {
         name: "cloud",
-        src: "public/cloud.png",
+        src: "cloud.png",
       },
     ]);
     initialized.value = true;
