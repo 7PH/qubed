@@ -1,11 +1,10 @@
 package org.contamination;
 
-import static org.contamination.CollisionDetector.getPlayerCollisions;
-
+import com.google.gson.Gson;
 import java.util.List;
 import java.util.Random;
 
-import com.google.gson.Gson;
+import static org.contamination.CollisionDetector.getPlayerCollisions;
 
 public class GameLogic implements Runnable {
   private static final double SPEED = 0.01;
@@ -18,7 +17,7 @@ public class GameLogic implements Runnable {
   public void run() {
     while (true) {
       if (GameState.GAME_STATUS == GameStatus.RUNNING) {
-        if (numberOfNonInfectedPlayers() <= 1) {
+        if (numberOfHealthyPlayers() == 0) {
           finishGame();
         }
         updatePlayerHealth();
@@ -43,9 +42,9 @@ public class GameLogic implements Runnable {
 
   private void updatePlayerHealth() {
     GameState.PLAYERS.keySet().stream()
-        .filter(p -> p.getHealth() == PlayerHealth.INFECTED)
-        .filter(GameLogic::shouldBecomeContagious)
-        .forEach(p -> p.setHealth(PlayerHealth.CONTAGIOUS));
+      .filter(p -> p.getHealth() == PlayerHealth.INFECTED)
+      .filter(GameLogic::shouldBecomeContagious)
+      .forEach(p -> p.setHealth(PlayerHealth.CONTAGIOUS));
   }
 
   private static Boolean shouldBecomeContagious(Player player) {
@@ -70,13 +69,13 @@ public class GameLogic implements Runnable {
 
   private static boolean isZeroInfectedPlayer() {
     return GameState.PLAYERS.keySet().stream()
-        .noneMatch(Player::isSick);
+      .noneMatch(Player::isSick);
   }
 
-  private long numberOfNonInfectedPlayers() {
+  private long numberOfHealthyPlayers() {
     return GameState.PLAYERS.keySet().stream()
-        .filter(player -> !player.isSick())
-        .count();
+      .filter(player -> player.getHealth() == PlayerHealth.HEALTHY)
+      .count();
   }
 
   private void calculateNewPositions() {
@@ -93,7 +92,7 @@ public class GameLogic implements Runnable {
     List<Player> playerCollisions = getPlayerCollisions(player);
     for (Player playerCollision : playerCollisions) {
       double D = Math.sqrt(
-          Math.pow(playerCollision.getX() - player.getX(), 2) + Math.pow(playerCollision.getY() - player.getY(), 2));
+        Math.pow(playerCollision.getX() - player.getX(), 2) + Math.pow(playerCollision.getY() - player.getY(), 2));
       double d = (SIZE_OF_THE_SPRITE * 2) - D;
       double alpha = Math.atan2(playerCollision.getY() - player.getY(), playerCollision.getX() - player.getX());
       player.setX(player.getX() - Math.cos(alpha) * d);
@@ -113,9 +112,9 @@ public class GameLogic implements Runnable {
 
   public void sendState() {
     GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS.name().toLowerCase(),
-        GameState.PLAYERS.keySet().stream().toList());
+      GameState.PLAYERS.keySet().stream().toList());
     String messageString = new Gson().toJson(new ReplyMessage("GAME_STATE", gameStateMessage));
     GameState.PLAYERS.values().forEach(
-        s -> s.getAsyncRemote().sendText(messageString));
+      s -> s.getAsyncRemote().sendText(messageString));
   }
 }
