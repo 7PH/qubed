@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { gameState, useWebSocket } from '../hooks/websocket';
+import { gameState } from '../hooks/websocket';
 
 const router = useRouter()
 const route = useRoute()
-const { disconnect } = useWebSocket();
 
 const mockedUsers = Array.from({ length: 20}).map((_, index) => ({
   name: `Player${index +1}`,
@@ -16,8 +14,6 @@ const winner = gameState.players.find((player) => !player.infected)?.name || '';
 const goBackToWaitingRoom = () => {
   router.push(`/waiting?name=${route.query.name}`)
 }
-
-onMounted(disconnect);
 
 </script>
 
@@ -60,7 +56,6 @@ onMounted(disconnect);
   border: 1px solid pink;
   border-radius: 4px;
   height: 70vb;
-  /* background-color: var(--background-secondary); */
 }
 
 .row {
