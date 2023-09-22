@@ -3,7 +3,8 @@ package org.contamination;
 public class Player {
   private String name;
   private Integer id;
-  private boolean infected;
+  private PlayerHealth health;
+  private Long infectedAt;
   private PlayerStatus status;
   private double x;
   private double y;
@@ -13,6 +14,7 @@ public class Player {
   public Player(String name) {
     this.name = name;
     this.status = PlayerStatus.WAITING;
+    this.health = PlayerHealth.HEALTHY;
     this.id = GameState.atomicInteger.getAndIncrement();
     this.x = Math.random();
     this.y = Math.random();
@@ -22,7 +24,7 @@ public class Player {
   public void clean() {
     this.x = Math.random();
     this.y = Math.random();
-    this.infected = false;
+    this.health = PlayerHealth.HEALTHY;
     this.status = PlayerStatus.WAITING;
   }
 
@@ -40,14 +42,6 @@ public class Player {
 
   public void setId(Integer id) {
     this.id = id;
-  }
-
-  public boolean isInfected() {
-    return infected;
-  }
-
-  public void setInfected(boolean infected) {
-    this.infected = infected;
   }
 
   public PlayerStatus getStatus() {
@@ -74,6 +68,32 @@ public class Player {
     this.y = y;
   }
 
+  public PlayerHealth getHealth() {
+    return health;
+  }
+
+  public void setHealth(PlayerHealth health) {
+    this.health = health;
+  }
+
+  public Long getInfectedAt() {
+    return infectedAt;
+  }
+
+  public void setInfectedAt(Long infectedAt) {
+    this.infectedAt = infectedAt;
+  }
+
+  public void infect() {
+    if (health == PlayerHealth.HEALTHY) {
+      health = PlayerHealth.INFECTED;
+      infectedAt = System.currentTimeMillis();
+    }
+  }
+
+  public boolean isSick() {
+    return health == PlayerHealth.INFECTED || health == PlayerHealth.CONTAGIOUS;
+  }
   public PlayerStats getPlayerStats() {
     return playerStats;
   }

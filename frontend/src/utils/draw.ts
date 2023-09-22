@@ -1,4 +1,4 @@
-import { GameObject, Player } from "../types";
+import { GameObject, Player, PlayerHealth } from "../types";
 
 const FULL_CIRCLE = 2 * Math.PI;
 
@@ -7,10 +7,19 @@ const BOUNDARY_WIDTH = 4;
 
 const PLAYER_USERNAME_FONT_SIZE = 1.8 / 100; // % of canvas width
 const PLAYER_SIZE = 2 / 100; // % of canvas width
-const PLAYER_SANE_FILL_COLOR = "#78eb7b";
-const PLAYER_SANE_STROKE_COLOR = "#169119";
-const PLAYER_INFECTED_FILL_COLOR = "#f26179";
-const PLAYER_INFECTED_STROKE_COLOR = "#bf1531";
+
+const PLAYER_FILL_COLOR = {
+  [PlayerHealth.Healthy]: "#78eb7b",
+  [PlayerHealth.Infected]: "#c3d32e",
+  [PlayerHealth.Contagious]: "#f26179",
+};
+
+const PLAYER_STROKE_COLOR = {
+  [PlayerHealth.Healthy]: "#169119",
+  [PlayerHealth.Infected]: "#e0840b",
+  [PlayerHealth.Contagious]: "#bf1531",
+};
+
 const PLAYER_INFECTED_SHAKE_AMPLITUDE = 0.1 / 100; // % of canvas width
 
 /**
@@ -25,20 +34,16 @@ export function drawPlayerCircle(
   let realY = player.y * canvas.height;
   const realRadius = PLAYER_SIZE * canvas.width;
 
-  if (player.infected) {
+  if (player.health !== PlayerHealth.Healthy) {
     realX +=
       canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
     realY +=
       canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
   }
 
-  context.strokeStyle = player.infected
-    ? PLAYER_INFECTED_STROKE_COLOR
-    : PLAYER_SANE_STROKE_COLOR;
+  context.strokeStyle = PLAYER_STROKE_COLOR[player.health];
   context.lineWidth = 1;
-  context.fillStyle = player.infected
-    ? PLAYER_INFECTED_FILL_COLOR
-    : PLAYER_SANE_FILL_COLOR;
+  context.fillStyle = PLAYER_FILL_COLOR[player.health];
   context.beginPath();
   context.arc(realX, realY, realRadius, 0, FULL_CIRCLE);
   context.fill();
@@ -59,9 +64,7 @@ export function drawPlayerUsername(
   const realFontSize = PLAYER_USERNAME_FONT_SIZE * canvas.width;
   const realRadius = PLAYER_SIZE * canvas.width;
 
-  context.fillStyle = player.infected
-    ? PLAYER_INFECTED_FILL_COLOR
-    : PLAYER_SANE_FILL_COLOR;
+  context.fillStyle = PLAYER_FILL_COLOR[player.health];
   context.font = `${realFontSize}px Arial`;
   context.textAlign = "center";
   context.fillText(
@@ -140,7 +143,9 @@ export function drawGame(
   drawPlayers(canvas, context, gameObject);
   if (gameObject.gameFinished) {
     const winner =
-      gameObject.players.find((player) => !player.infected)?.name || "";
+      gameObject.players.find(
+        (player) => player.health === PlayerHealth.Healthy
+      )?.name ?? "N/A";
     drawGameFinished(canvas, context, winner);
   }
 }
