@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { useWebSocket } from "../hooks/websocket";
 import { PlayerStatus } from "../types";
 
@@ -20,6 +20,20 @@ function handleReadyClick() {
 function handleStart() {
   startGame();
 }
+
+function handleEnter(event: KeyboardEvent) {
+  if (event.key === 'Enter') {
+    handleReadyClick()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keypress', handleEnter)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keypress', handleEnter)
+})
 
 const canStart = computed(() => playerList.value.filter((p) => p.status === PlayerStatus.Ready).length >= MIN_PLAYERS_NUMBER);
 </script>
