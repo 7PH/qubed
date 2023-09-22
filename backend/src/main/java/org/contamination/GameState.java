@@ -32,6 +32,7 @@ public class GameState {
   public static void removePlayer(Session session) {
     Player playerToRemove = SESSION_IDS_PLAYERS.get(session.getId());
     PLAYERS.remove(playerToRemove);
+    SPECTATORS.remove(playerToRemove);
     SESSION_IDS_PLAYERS.remove(session.getId());
   }
 
