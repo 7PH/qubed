@@ -40,6 +40,10 @@ const canStart = computed(
     playerList.value.filter((p) => p.status === PlayerStatus.Ready).length >=
     MIN_PLAYERS_NUMBER
 );
+
+const hasPlayersNotReady = computed(() => {
+  return playerList.value.find((p) => p.status !== PlayerStatus.Ready) || ! canStart.value;
+});
 </script>
 
 <template>
@@ -89,6 +93,9 @@ const canStart = computed(
 
     <div style="margin-top: 2rem">
       <button class="w-100" :disabled="!canStart" @click="handleStart">
+        <span style="margin-right: .5em;" v-if="hasPlayersNotReady">
+          ⚠ 
+        </span>
         Start the game!
       </button>
     </div>
