@@ -47,13 +47,18 @@ const canStart = computed(
     <h3>Room:</h3>
 
     <table class="playerlist" col>
-      <thead>
+      <thead v-if="playerList.length !== 0">
         <tr>
           <th>Players ({{ playerList.length }})</th>
           <th>State</th>
         </tr>
       </thead>
-      <tr v-for="player in playerList">
+      
+      <td v-if="playerList.length === 0" style="display: flex; align-items: center;">
+        <strong>Game is in progress</strong>
+      </td>
+
+      <tr v-for="player in playerList"> 
         <td>
           <span
             :style="{ fontWeight: player.id === playerId ? 600 : 'normal' }"
