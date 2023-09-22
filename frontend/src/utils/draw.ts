@@ -1,4 +1,5 @@
 import { GameObject, Player, PlayerHealth } from "../types";
+import { sortPlayers } from "./score";
 
 const FULL_CIRCLE = 2 * Math.PI;
 
@@ -160,10 +161,7 @@ export function drawGame(
     );
   }
   if (gameObject.gameFinished) {
-    const winner =
-      gameObject.players.find(
-        (player) => player.health === PlayerHealth.Healthy
-      )?.name ?? "N/A";
-    drawGameFinished(canvas, context, winner);
+    const winner = sortPlayers(gameObject.players)[0];
+    drawGameFinished(canvas, context, winner.name);
   }
 }

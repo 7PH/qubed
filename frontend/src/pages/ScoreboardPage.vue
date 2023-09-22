@@ -2,16 +2,12 @@
 import { useRoute, useRouter } from "vue-router";
 import { gameState } from "../hooks/websocket";
 import { computed } from "vue";
-import { formatSurvivalTime } from "../utils/score";
+import { formatSurvivalTime, sortPlayers } from "../utils/score";
 
 const router = useRouter();
 const route = useRoute();
 
-const playerList = computed(() =>
-  gameState.players
-    .slice(0)
-    .sort((p1, p2) => p2.playerStats.survivalTime - p1.playerStats.survivalTime)
-);
+const players = computed(() => sortPlayers(gameState.players));
 
 const goBackToWaitingRoom = () => {
   router.push(`/waiting?name=${route.query.name}`);
@@ -22,7 +18,7 @@ const goBackToWaitingRoom = () => {
   <div class="layout">
     <div class="winner">
       <h2>
-        Congrats <strong>{{ playerList[0].name }}</strong
+        Congrats <strong>{{ players[0].name }}</strong
         >, <br />
         you won!
       </h2>
@@ -47,7 +43,7 @@ const goBackToWaitingRoom = () => {
         </div>
       </div>
 
-      <div class="row" v-for="player in playerList">
+      <div class="row" v-for="player in players">
         <div class="column">{{ player.name }}</div>
         <div class="column">
           {{ player.playerStats.numberOfInfectedPeople }}
