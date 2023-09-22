@@ -30,6 +30,7 @@ onMounted(() => {
 
     <input
       style="margin-top: 20px"
+      maxlength="20"
       type="text"
       id="username"
       placeholder="Enter a username and press enter"
