@@ -184,6 +184,8 @@ export function drawGame(
   drawPlayers(canvas, context, gameObject);
   drawElement(canvas, context, images.bush2, 0.2, 0.2, 1, "George");
   drawElement(canvas, context, images.bush2, 0.2, 0.6, 1, "George");
+  drawElement(canvas, context, images.cloud, 0.4, 0.5, 0.3);
+
   drawGameBoundaries(canvas, context);
 
   if (gameObject.gameFinished) {
