@@ -34,6 +34,9 @@ public class GameLogic implements Runnable {
         throw new RuntimeException(e);
       }
       sendState();
+      if (GameState.GAME_STATUS == GameStatus.FINISHED) {
+        GameState.GAME_STATUS = GameStatus.PENDING;
+      }
     }
 
   }
