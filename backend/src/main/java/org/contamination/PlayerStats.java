@@ -24,6 +24,10 @@ public final class PlayerStats {
     this.numberOfInfectedPeople = numberOfInfectedPeople;
   }
 
+  public void incrementNumberOfInfectingPlayer() {
+    numberOfInfectedPeople++;
+  }
+
   public void setSurvivalTime(long survivalTime) {
     this.survivalTime = survivalTime;
   }
@@ -48,6 +52,4 @@ public final class PlayerStats {
       "numberOfInfectedPeople=" + numberOfInfectedPeople + ", " +
       "survivalTime=" + survivalTime + ']';
   }
-
-
 }
