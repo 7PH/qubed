@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class GameAwesomeStats {
 
-  private final long gameStart;
+  public final long gameStart;
   private Map<Integer, Long> survivalTimes = new HashMap<>();
   private Map<Integer, Integer> numberOfInfectedPeople = new HashMap<>();
 
@@ -22,10 +22,12 @@ public class GameAwesomeStats {
     survivalTimes.put(idOfInfectedPlayer, System.currentTimeMillis() - gameStart);
     Player player = GameState.getPlayerById(idOfInfectedPlayer);
     player.getPlayerStats().setSurvivalTime(survivalTimes.get(player.getId()));
-    if(idOfInfectingPlayer != null) {
+
+    if (idOfInfectingPlayer != null) {
       numberOfInfectedPeople.compute(idOfInfectingPlayer, (a, b) -> b + 1);
       player = GameState.getPlayerById(idOfInfectingPlayer);
       player.getPlayerStats().setNumberOfInfectedPeople(numberOfInfectedPeople.get(player.getId()));
     }
+
   }
 }

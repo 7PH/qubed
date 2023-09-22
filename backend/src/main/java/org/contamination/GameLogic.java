@@ -22,6 +22,7 @@ public class GameLogic implements Runnable {
       if (GameState.GAME_STATUS == GameStatus.RUNNING) {
         if (numberOfNonInfectedPlayers() <= 1) {
           finishGame();
+          continue;
         }
         updatePlayerHealth();
         calculateNewPositions();
@@ -48,6 +49,14 @@ public class GameLogic implements Runnable {
       .filter(p -> p.getHealth() == PlayerHealth.INFECTED)
       .filter(GameLogic::shouldBecomeContagious)
       .forEach(p -> p.setHealth(PlayerHealth.CONTAGIOUS));
+
+
+    long timeSinceStart = System.currentTimeMillis() - GameState.gameStats.gameStart;
+    GameState.PLAYERS.keySet().stream()
+      .filter(p -> p.getHealth() == PlayerHealth.HEALTHY)
+      .forEach(p -> {
+        p.getPlayerStats().setSurvivalTime(timeSinceStart);
+      });
   }
 
   private static Boolean shouldBecomeContagious(Player player) {
