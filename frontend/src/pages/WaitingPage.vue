@@ -39,7 +39,7 @@ const canStart = computed(() => everyoneReady.value && playerList.value.length >
     <table class="playerlist" col>
       <thead>
         <tr>
-          <th>Player</th>
+          <th>Players ({{ playerList.length }})</th>
           <th>State</th>
         </tr>
       </thead>
@@ -60,6 +60,8 @@ const canStart = computed(() => everyoneReady.value && playerList.value.length >
               player.status === PlayerStatus.Ready ? "✅ Ready" : "⏳ Wait up"
             }}</span
           >
+
+          <button class="secondary" style="margin-left: 10px" v-if="player.id !== playerId && player.status === PlayerStatus.Waiting">X</button>
 
           <button
             v-if="
@@ -92,14 +94,11 @@ const canStart = computed(() => everyoneReady.value && playerList.value.length >
 
   tr {
     padding: 8px 0;
-    height: 70px;
-  }
-
-  td {
-      width: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
   }
 }
+
+td {
+  width: 50%;
+  height: 45px;
+  }
 </style>

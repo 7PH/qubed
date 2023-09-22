@@ -45,6 +45,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
+  background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
 button:focus,
@@ -53,6 +54,15 @@ button:focus-visible {
 }
 button:disabled {
   border: 1px solid transparent;
+}
+
+button.secondary {
+  border: 1px solid transparent;
+  background: var(--background-primary);
+  padding: 0.3em 0.6em;
+}
+button.secondary:hover {
+  background-color: black;
 }
 
 input {
