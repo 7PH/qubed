@@ -6,7 +6,7 @@ public class GameAwesomeStats {
 
   public GameAwesomeStats() {
     GameState.PLAYERS.forEach((p, s) -> {
-      p.setPlayerStats(new PlayerStats(0, 0));
+      p.setPlayerStats(new PlayerStats(0, 0, 0));
     });
 
     gameStart = System.currentTimeMillis();
