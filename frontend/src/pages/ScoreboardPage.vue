@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { computed } from "vue";
-import { onMounted, onUnmounted, useRoute, useRouter } from "vue-router";
+import { computed, onMounted, onUnmounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { connectionReference, gameState } from "../hooks/websocket";
 import { formatSurvivalTime, sortPlayers } from "../utils/score";
 
