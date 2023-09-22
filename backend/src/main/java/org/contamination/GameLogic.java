@@ -66,7 +66,6 @@ public class GameLogic implements Runnable {
     GameState.GAME_STATUS = GameStatus.FINISHED;
     ScoreCalculator.setPlayerScores();
     GameState.clean();
-    System.out.println("Setting player scores :) " + GameState.PLAYERS.keySet().stream().findFirst().get().getPlayerStats().getScore());
   }
 
   private static void randomlyInfectOnePlayer() {
