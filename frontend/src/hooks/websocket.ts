@@ -94,6 +94,7 @@ export function useWebSocket() {
       playerList.value = data.players;
     } else if (data.gameState === GameState.FINISHED) {
       gameState.gameFinished = true;
+      gameState.players = data.players;
 
       setTimeout(() => {
         router.push(`/scoreboard?name=${playername}`);

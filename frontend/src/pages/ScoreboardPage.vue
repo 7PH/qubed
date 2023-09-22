@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useRoute, useRouter } from "vue-router";
-import { gameState } from "../hooks/websocket";
 import { computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { connectionReference, gameState } from "../hooks/websocket";
 import { formatSurvivalTime, sortPlayers } from "../utils/score";
 
 const router = useRouter();
@@ -12,13 +12,17 @@ const players = computed(() => sortPlayers(gameState.players));
 const goBackToWaitingRoom = () => {
   router.push(`/waiting?name=${route.query.name}`);
 };
+
+if (!connectionReference) {
+  route.query.name ?  goBackToWaitingRoom() : router.push('/') 
+}
 </script>
 
 <template>
   <div class="layout">
     <div class="winner">
       <h2>
-        Congrats <strong class="winner-name">{{ players[0].name }}</strong
+        Congrats <strong class="winner-name">{{ players[0]?.name ?? 'N/A' }}</strong
         >, <br />
         you won!
       </h2>

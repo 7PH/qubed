@@ -65,7 +65,9 @@ export const useGameRenderer = () => {
       gameState,
       initialized.value,
       images.value,
-      lastTickTime.value
+      document.location.hostname === "localhost"
+        ? lastTickTime.value
+        : undefined
     );
 
     lastTickTime.value = performance.now();

@@ -20,6 +20,9 @@ services:
       - ./dynamic.yml:/configuration/dynamic.yml:ro
     networks:
       - main
+    depends_on:
+      - frontend
+      - backend
   
   frontend:
     build: ./frontend

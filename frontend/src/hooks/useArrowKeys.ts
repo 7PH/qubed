@@ -8,6 +8,10 @@ const KEY_MAP: Record<string, string> = {
   ArrowUp: "up",
   ArrowRight: "right",
   ArrowDown: "down",
+  a: "left",
+  w: "up",
+  d: "right",
+  s: "down",
 };
 
 export type CallbackType = (args: { [key: string]: boolean }) => unknown;
