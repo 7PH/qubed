@@ -30,29 +30,42 @@ const goBackToWaitingRoom = () => {
         frameBorder="0"
       ></iframe>
     </div>
-    <div class="scoreboard">
-      <div class="row header-row">
-        <div class="column">
-          <strong>Name</strong>
-        </div>
-        <div class="column">
-          <strong># Players Infected</strong>
-        </div>
-        <div class="column">
-          <strong>Survival Time</strong>
-        </div>
-      </div>
+    <table class="scoreboard">
+      <thead>
+        <tr class="row header-row">
+          <td>
+            <strong>Name</strong>
+          </td>
+          <td>
+            <strong># Players Infected</strong>
+          </td>
+          <td>
+            <strong>Survival Time</strong>
+          </td>
+          <td>
+            <strong>Score</strong>
+          </td>
+        </tr>
+      </thead>
 
-      <div class="row" v-for="player in players">
-        <div class="column">{{ player.name }}</div>
-        <div class="column">
-          {{ player.playerStats.numberOfInfectedPeople }}
-        </div>
-        <div class="column">
-          {{ formatSurvivalTime(player.playerStats.survivalTime) }}
-        </div>
-      </div>
-    </div>
+      <tbody>
+        <tr class="row" v-for="player in players">
+          <td>
+            <span v-if="player.id === gameState.playerId">⭐</span>
+            {{ player.name }}
+          </td>
+          <td>
+            {{ player.playerStats.numberOfInfectedPeople }}
+          </td>
+          <td class="time-column">
+            {{ formatSurvivalTime(player.playerStats.survivalTime) }}
+          </td>
+          <td>
+            {{ player.playerStats.score }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <button class="wait-btn w-100" @click="goBackToWaitingRoom">
       Go to waiting room
@@ -68,29 +81,30 @@ const goBackToWaitingRoom = () => {
   margin-bottom: 20px;
 }
 .scoreboard {
+  border-collapse: collapse;
   overflow: auto;
   border: 1px solid pink;
   border-radius: 4px;
-  height: 70vb;
+  width: 100%;
 }
 
 .row {
-  display: flex;
-  padding: 10px;
+  height: 50px;
   border-bottom: 1px solid var(--primary-color);
 }
 
 .header-row {
+  background-color: var(--primary-color);
   position: sticky;
-  background-color: var(--background-secondary);
   top: 0;
-}
-
-.column {
-  flex-grow: 1;
+  border-bottom-width: 2px;
 }
 
 .wait-btn {
   margin-top: 10px;
+}
+
+.time-column {
+  text-align: right;
 }
 </style>

@@ -12,6 +12,7 @@ export enum PlayerHealth {
 export type PlayerStats = {
   numberOfInfectedPeople: number;
   survivalTime: number;
+  score: number;
 };
 
 export type Player = {
