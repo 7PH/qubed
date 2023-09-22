@@ -66,8 +66,7 @@ public class GameLogic implements Runnable {
   private static void randomlyInfectOnePlayer() {
     List<Player> players = GameState.PLAYERS.keySet().stream().toList();
     Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size()));
-    player.infect();
-    GameState.gameStats.onPlayerInfected(player.getId(), null);
+    player.infect(null);
   }
 
   private static boolean isReadyToInfectTime() {
@@ -108,11 +107,9 @@ public class GameLogic implements Runnable {
       playerCollision.setY(playerCollision.getY() + Math.sin(alpha) * d);
 
       if (playerCollision.getHealth() == PlayerHealth.CONTAGIOUS) {
-        player.infect();
-        GameState.gameStats.onPlayerInfected(player.getId(), playerCollision.getId());
+        player.infect(playerCollision.getId());
       } else if (player.getHealth() == PlayerHealth.CONTAGIOUS) {
-        playerCollision.infect();
-        GameState.gameStats.onPlayerInfected(playerCollision.getId(), player.getId());
+        playerCollision.infect(player.getId());
       }
     }
   }

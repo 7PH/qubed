@@ -110,10 +110,12 @@ public class Player {
     this.infectedAt = infectedAt;
   }
 
-  public void infect() {
+  public void infect(Integer idOfInfectingPlayer) {
     if (health == PlayerHealth.HEALTHY) {
       health = PlayerHealth.INFECTED;
       infectedAt = System.currentTimeMillis();
+
+      GameState.gameStats.onPlayerInfected(this.getId(), idOfInfectingPlayer);
     }
   }
 
