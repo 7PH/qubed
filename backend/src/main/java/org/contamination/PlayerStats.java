@@ -32,7 +32,7 @@ public final class PlayerStats {
     this.survivalTime = survivalTime;
   }
 
-  public long getScore() {
+  public long score() {
     return score;
   }
 

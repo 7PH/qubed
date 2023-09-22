@@ -6,6 +6,7 @@ public class ScoreCalculator {
 
   public static void setPlayerScores() {
     GameState.PLAYERS.keySet().stream()
+      .peek(player -> System.out.println("Calculating score for " + player.getName()))
       .map(Player::getPlayerStats)
       .forEach(stat -> stat.setScore(calculatePlayerScore(stat)));
   }
@@ -13,14 +14,29 @@ public class ScoreCalculator {
   private static long calculatePlayerScore(PlayerStats stats) {
     int numberOfInfectedPeople = stats.numberOfInfectedPeople();
     long survivalTime = stats.survivalTime();
-    return timeSurvivalFormula(survivalTime) + infectionFormula(numberOfInfectedPeople);
+    long timeSurvivalFormula = timeSurvivalFormula(survivalTime);
+    System.out.println("timeSurvivalFormula="+timeSurvivalFormula);
+    long infectionFormula = infectionFormula(numberOfInfectedPeople);
+    System.out.println("infectionFormula="+infectionFormula);
+    long score = timeSurvivalFormula + infectionFormula;
+    System.out.println("Score="+score);
+    return score;
   }
 
   private static long infectionFormula(int numberOfInfectedPeople) {
+    if (numberOfInfectedPeople == 0) {
+      return 0;
+    }
+
     int totalPlayers = GameState.PLAYERS.size();
+    double baseLine = ceil(0.25 * totalPlayers);
+    double denominator = Math.max(((baseLine) * (baseLine - 1)), 1);
+    if (numberOfInfectedPeople == 0) {
+      return (long)ceil(100/denominator);
+    }
+
     int numerator = numberOfInfectedPeople * (numberOfInfectedPeople - 1);
-    double denominator = (0.25 * totalPlayers) * (0.25 * totalPlayers - 1);
-    return (long) ceil((numerator*100)/denominator);
+    return (long)ceil((numerator*100)/denominator);
   }
 
   private static long timeSurvivalFormula(long survivalTime) {
