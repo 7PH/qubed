@@ -1,13 +1,13 @@
 package org.contamination;
 
-import com.google.gson.Gson;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static org.contamination.CollisionDetector.getPlayerCollisions;
+
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static javax.swing.UIManager.get;
-import static org.contamination.CollisionDetector.getPlayerCollisions;
+import com.google.gson.Gson;
 
 public class GameLogic implements Runnable {
   private static final double SPEED = 0.01;
@@ -58,13 +58,13 @@ public class GameLogic implements Runnable {
 
   private static boolean isZeroInfectedPlayer() {
     return GameState.PLAYERS.keySet().stream()
-      .noneMatch(Player::isInfected);
+        .noneMatch(Player::isInfected);
   }
 
   private long numberOfNonInfectedPlayers() {
     return GameState.PLAYERS.keySet().stream()
-      .filter(player -> !player.isInfected())
-      .count();
+        .filter(player -> !player.isInfected())
+        .count();
   }
 
   private void calculateNewPositions() {
@@ -74,22 +74,51 @@ public class GameLogic implements Runnable {
     }
   }
 
+  /**
+   * Get player direction angle based on its input. If no input is given, return
+   * -1
+   */
+  private double getDirectionAngle(PlayerInput playerInput) {
+    if (playerInput.right && playerInput.down) {
+      return Math.PI / 4;
+    } else if (playerInput.right && playerInput.up) {
+      return 7 * Math.PI / 4;
+    } else if (playerInput.left && playerInput.down) {
+      return 3 * Math.PI / 4;
+    } else if (playerInput.left && playerInput.up) {
+      return 5 * Math.PI / 4;
+    } else if (playerInput.right) {
+      return 0;
+    } else if (playerInput.down) {
+      return Math.PI / 2;
+    } else if (playerInput.left) {
+      return Math.PI;
+    } else if (playerInput.up) {
+      return 3 * Math.PI / 2;
+    } else {
+      return -1;
+    }
+  }
+
   private void calculateNewPosition(Player player, PlayerInput playerInput) {
     double oldX = player.getX();
     double oldY = player.getY();
     double step = SPEED;
 
-    double x = (playerInput.right ? step : 0) + (playerInput.left ? -step : 0);
-    double y = (playerInput.up ? -step : 0) + (playerInput.down ? step : 0);
-    double newX = min(max(oldX + x, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
-    double newY = min(max(oldY + y, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
+    double angle = getDirectionAngle(playerInput);
+    double xVel = angle != -1 ? Math.cos(angle) * step : 0;
+    double yVel = angle != -1 ? Math.sin(angle) * step : 0;
+
+    double newX = min(max(oldX + xVel, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
+    double newY = min(max(oldY + yVel, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
 
     player.setY(newY);
     player.setX(newX);
 
     List<Player> playerCollisions = getPlayerCollisions(player);
     for (Player playerCollision : playerCollisions) {
-      double D = Math.sqrt(Math.pow(playerCollision.getX() - player.getX(), 2) + Math.pow(playerCollision.getY() - player.getY(), 2));
+      double D = Math.sqrt(
+          Math.pow(playerCollision.getX() - player.getX(), 2) + Math.pow(playerCollision.getY() - player.getY(), 2));
       double d = (SIZE_OF_THE_SPRITE * 2) - D;
       double alpha = Math.atan2(playerCollision.getY() - player.getY(), playerCollision.getX() - player.getX());
       player.setX(player.getX() - Math.cos(alpha) * d);
@@ -106,10 +135,10 @@ public class GameLogic implements Runnable {
   }
 
   public void sendState() {
-    GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS.name().toLowerCase(), GameState.PLAYERS.keySet().stream().toList());
+    GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS.name().toLowerCase(),
+        GameState.PLAYERS.keySet().stream().toList());
     String messageString = new Gson().toJson(new ReplyMessage("GAME_STATE", gameStateMessage));
     GameState.PLAYERS.values().forEach(
-      s -> s.getAsyncRemote().sendText(messageString)
-    );
+        s -> s.getAsyncRemote().sendText(messageString));
   }
 }
