@@ -6,7 +6,6 @@ import java.util.Random;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static javax.swing.UIManager.get;
 import static org.contamination.CollisionDetector.getPlayerCollisions;
 
 public class GameLogic implements Runnable {
@@ -47,6 +46,7 @@ public class GameLogic implements Runnable {
     List<Player> players = GameState.PLAYERS.keySet().stream().toList();
     Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size()));
     player.setInfected(true);
+    GameState.gameStats.onPlayerInfected(player.getId(), null);
   }
 
   private static boolean isReadyToInfectTime() {
@@ -96,8 +96,11 @@ public class GameLogic implements Runnable {
 
       if (playerCollision.isInfected()) {
         player.setInfected(true);
+        GameState.gameStats.onPlayerInfected(player.getId(), playerCollision.getId());
       } else if (player.isInfected()) {
         playerCollision.setInfected(true);
+        GameState.gameStats.onPlayerInfected(playerCollision.getId(), player.getId());
+
       }
     }
   }

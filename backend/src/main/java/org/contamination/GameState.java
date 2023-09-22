@@ -13,6 +13,7 @@ public class GameState {
   public static Map<Integer, PlayerInput> PLAYER_INPUTS = new ConcurrentHashMap<>();
   public static GameStatus GAME_STATUS = GameStatus.PENDING;
   public static AtomicInteger atomicInteger = new AtomicInteger();
+  public static GameAwesomeStats gameStats = new GameAwesomeStats();
   public static long gameStartTime = 0;
 
   public static void addPlayer(Player player, Session session) {
@@ -32,6 +33,7 @@ public class GameState {
       GAME_STATUS = GameStatus.RUNNING;
       positionPlayers();
       gameStartTime = System.currentTimeMillis();
+      gameStats = new GameAwesomeStats();
     }
   }
 
