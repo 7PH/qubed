@@ -22,27 +22,29 @@ function handleStart() {
 }
 
 function handleEnter(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    handleReadyClick()
+  if (event.key === "Enter") {
+    handleReadyClick();
   }
 }
 
 onMounted(() => {
-  document.addEventListener('keypress', handleEnter)
-})
+  document.addEventListener("keypress", handleEnter);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('keypress', handleEnter)
-})
+  document.removeEventListener("keypress", handleEnter);
+});
 
-const canStart = computed(() => playerList.value.filter((p) => p.status === PlayerStatus.Ready).length >= MIN_PLAYERS_NUMBER);
+const canStart = computed(
+  () =>
+    playerList.value.filter((p) => p.status === PlayerStatus.Ready).length >=
+    MIN_PLAYERS_NUMBER
+);
 </script>
 
 <template>
   <div class="layout">
-
     <h3>Room:</h3>
-   
 
     <table class="playerlist" col>
       <thead>
@@ -105,5 +107,5 @@ const canStart = computed(() => playerList.value.filter((p) => p.status === Play
 td {
   width: 50%;
   height: 45px;
-  }
+}
 </style>
