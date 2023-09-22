@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 
 public class GameLogic implements Runnable {
   private static final long TIME_BEFORE_INFECTION = 5000;
-  private static final long INCUBATION_PERIOD = 5000;
+  private static final long INCUBATION_PERIOD = 3000;
   private static final long FRAME_RATE = 20;
 
   @Override
