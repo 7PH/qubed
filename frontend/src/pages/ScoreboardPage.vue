@@ -18,7 +18,7 @@ const goBackToWaitingRoom = () => {
   <div class="layout">
     <div class="winner">
       <h2>
-        Congrats <strong>{{ players[0].name }}</strong
+        Congrats <strong class="winner-name">{{ players[0].name }}</strong
         >, <br />
         you won!
       </h2>
@@ -79,6 +79,10 @@ const goBackToWaitingRoom = () => {
   justify-content: space-around;
   align-items: center;
   margin-bottom: 20px;
+
+  .winner-name {
+    text-shadow: 0px 0px 8px deeppink;
+  }
 }
 .scoreboard {
   border-collapse: collapse;
