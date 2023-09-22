@@ -12,9 +12,16 @@
 
   color-scheme: light dark;
   color: var(--primary-text);
-  background: -webkit-linear-gradient(bottom, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  background: -webkit-linear-gradient(
+    bottom,
+    #414345,
+    #232526
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #414345,
+    #232526
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -44,9 +51,10 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+button:hover:not(:disabled) {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
+  color: black;
 }
 button:focus,
 button:focus-visible {
