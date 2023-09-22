@@ -40,12 +40,18 @@ const goBackToWaitingRoom = () => {
           <strong>Name</strong>
         </div>
         <div class="column">
-          <strong>Place</strong>
+          <strong># Other Players Infected</strong>
+        </div>
+        <div class="column">
+          <strong>Survival Time</strong>
         </div>
       </div>
 
       <div class="row" v-for="player in gameState.players">
         <div class="column">{{ player.name }}</div>
+        <div class="column">
+          {{ player.playerStats.numberOfInfectedPeople }}
+        </div>
         <div class="column">
           {{ formatSurvivalTime(player.playerStats.survivalTime) }}
         </div>
