@@ -167,9 +167,7 @@ export function drawGameFinished(
   );
 }
 
-function drawFPS(context: CanvasRenderingContext2D, lastTickTime: number) {
-  const delta = performance.now() - lastTickTime;
-  const fps = Math.round(1000 / delta);
+function drawFPS(context: CanvasRenderingContext2D, fps: number) {
   context.fillStyle = "#ccc";
   context.font = "bold 10px Arial";
   context.textAlign = "left";
@@ -185,10 +183,14 @@ export function drawGame(
   gameObject: GameObject,
   initialized: boolean,
   images: ImagesLoaded,
-  lastTickTime: number
+  lastTickTime?: number
 ) {
   // Always draw FPS
-  drawFPS(context, lastTickTime);
+  if (lastTickTime) {
+    const delta = performance.now() - lastTickTime;
+    const fps = Math.round(1000 / delta);
+    drawFPS(context, fps);
+  }
 
   // If game is not initialized, don't draw anything else
   if (!initialized) {

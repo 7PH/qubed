@@ -16,6 +16,7 @@ useEndGameConfetti();
 <style scoped>
 .game-container {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -24,6 +25,7 @@ useEndGameConfetti();
 }
 
 .game-container > div {
+  overflow: hidden;
   max-height: 1200px;
   aspect-ratio: 1 / 1;
   flex-grow: 1;
