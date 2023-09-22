@@ -9,7 +9,5 @@ export function formatSurvivalTime(ms: number) {
 export function sortPlayers(players: Player[]) {
   return players
     .slice(0)
-    .sort(
-      (p1, p2) => p2.playerStats.survivalTime - p1.playerStats.survivalTime
-    );
+    .sort((p1, p2) => p2.playerStats.score - p1.playerStats.score);
 }

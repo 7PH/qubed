@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { gameState } from "../hooks/websocket";
-import { computed } from "vue";
 import { formatSurvivalTime, sortPlayers } from "../utils/score";
 
 const router = useRouter();
@@ -18,7 +18,7 @@ const goBackToWaitingRoom = () => {
   <div class="layout">
     <div class="winner">
       <h2>
-        Congrats <strong class="winner-name">{{ players[0].name }}</strong
+        Congrats <strong class="winner-name">{{ players[0]?.name ?? 'N/A' }}</strong
         >, <br />
         you won!
       </h2>
