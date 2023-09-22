@@ -30,8 +30,8 @@ public class ScoreCalculator {
 
     int totalPlayers = GameState.PLAYERS.size();
     double baseLine = ceil(0.3 * totalPlayers);
-    double denominator = Math.max(((baseLine) * (baseLine - 1)), 1);
-    if (numberOfInfectedPeople == 0) {
+    double denominator = Math.max(((baseLine) * (baseLine - 1)), 3);
+    if (numberOfInfectedPeople == 1) {
       return (long)ceil(100/denominator);
     }
 
@@ -47,6 +47,7 @@ public class ScoreCalculator {
       .sorted()
       .toList()
       .get(totalPlayers - 2);
-    return (long) ceil(1.5 * (survivalTime*100)/scdLastSurvivor);
+    long pointsByScd = survivalTime / 1000;
+    return (long) ceil((1.5 * (survivalTime*100)/scdLastSurvivor) + pointsByScd);
   }
 }
