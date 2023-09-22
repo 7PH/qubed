@@ -3,11 +3,17 @@ export enum PlayerStatus {
   Ready = "READY",
 }
 
+export enum PlayerHealth {
+  Healthy = "HEALTHY",
+  Infected = "INFECTED",
+  Contagious = "CONTAGIOUS",
+}
+
 export type Player = {
   id: number;
   name: string;
   status: PlayerStatus;
-  infected: boolean;
+  health: PlayerHealth;
   x: number;
   y: number;
 };
