@@ -40,19 +40,19 @@ public class GameWebsocket {
   }
 
   private void handlePlayerInputChange(Player player, Message msg) {
-    PlayerInput playerInputChange = new Gson().fromJson(msg.content(), PlayerInput.class);
+    PlayerInputMessage playerInputChange = new Gson().fromJson(msg.content(), PlayerInputMessage.class);
     PlayerInput playerInput = PLAYER_INPUTS.get(player.getId());
-    if (playerInputChange.down != null) {
-      playerInput.down = playerInputChange.down;
+    if (playerInputChange.down() != null) {
+      playerInput.down = playerInputChange.down();
     }
-    if (playerInputChange.up != null) {
-      playerInput.up = playerInputChange.up;
+    if (playerInputChange.up() != null) {
+      playerInput.up = playerInputChange.up();
     }
-    if (playerInputChange.right != null) {
-      playerInput.right = playerInputChange.right;
+    if (playerInputChange.right() != null) {
+      playerInput.right = playerInputChange.right();
     }
-    if (playerInputChange.left != null) {
-      playerInput.left = playerInputChange.left;
+    if (playerInputChange.left() != null) {
+      playerInput.left = playerInputChange.left();
     }
   }
 
