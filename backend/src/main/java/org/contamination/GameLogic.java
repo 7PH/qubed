@@ -1,6 +1,8 @@
 package org.contamination;
 
 import static org.contamination.CollisionDetector.getPlayerCollisions;
+import static org.contamination.GameState.PLAYER_INPUTS;
+import static org.contamination.GameState.SPECTATORS;
 
 import java.util.List;
 import java.util.Random;
@@ -35,6 +37,8 @@ public class GameLogic implements Runnable {
       sendState();
       if (GameState.GAME_STATUS == GameStatus.FINISHED) {
         GameState.GAME_STATUS = GameStatus.PENDING;
+        GameState.PLAYERS.putAll(SPECTATORS);
+        SPECTATORS.clear();
       }
     }
 
@@ -62,6 +66,7 @@ public class GameLogic implements Runnable {
     GameState.GAME_STATUS = GameStatus.FINISHED;
     ScoreCalculator.setPlayerScores();
     GameState.clean();
+    System.out.println("Setting player scores :) " + GameState.PLAYERS.keySet().stream().findFirst().get().getPlayerStats().getScore());
   }
 
   private static void randomlyInfectOnePlayer() {

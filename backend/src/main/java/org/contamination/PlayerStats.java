@@ -10,6 +10,16 @@ public final class PlayerStats {
     this.numberOfInfectedPeople = numberOfInfectedPeople;
     this.survivalTime = survivalTime;
     this.score = score;
+    System.out.println("Resetting player scores :) ");
+  }
+
+  @Override
+  public String toString() {
+    return "PlayerStats{" +
+      "numberOfInfectedPeople=" + numberOfInfectedPeople +
+      ", survivalTime=" + survivalTime +
+      ", score=" + score +
+      '}';
   }
 
   public int numberOfInfectedPeople() {

@@ -13,6 +13,7 @@ import javax.websocket.server.ServerEndpoint;
 import static org.contamination.GameState.PLAYER_INPUTS;
 import static org.contamination.GameState.SESSION_IDS_PLAYERS;
 import static org.contamination.GameState.addPlayer;
+import static org.contamination.GameState.addSpectator;
 import static org.contamination.GameState.removePlayer;
 import static org.contamination.PlayerStatus.READY;
 
@@ -22,9 +23,14 @@ public class GameWebsocket {
   @OnOpen
   public void onOpen(Session session, @PathParam("username") String username) throws IOException {
     Player player = new Player(username);
-    addPlayer(player, session);
+    if (GameState.GAME_STATUS == GameStatus.PENDING) {
+      addPlayer(player, session);
+    } else {
+      addSpectator(player, session);
+    }
     session.getBasicRemote().sendText(new Gson().toJson(new ReplyMessage("CONNECTED", new ConnectedMessage(player.getId()))));
   }
+
 
   @OnMessage
   public void onMessage(Session session, String message) {

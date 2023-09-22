@@ -9,6 +9,7 @@ import static org.contamination.CollisionDetector.anyCollision;
 
 public class GameState {
   public static Map<Player, Session> PLAYERS = new ConcurrentHashMap<>();
+  public static Map<Player, Session> SPECTATORS = new ConcurrentHashMap<>();
   public static Map<String, Player> SESSION_IDS_PLAYERS = new ConcurrentHashMap<>();
   public static Map<Integer, PlayerInput> PLAYER_INPUTS = new ConcurrentHashMap<>();
   public static GameStatus GAME_STATUS = GameStatus.PENDING;
@@ -22,6 +23,12 @@ public class GameState {
     PLAYER_INPUTS.put(player.getId(), new PlayerInput());
   }
 
+  public static void addSpectator(Player player, Session session) {
+    SPECTATORS.put(player, session);
+    SESSION_IDS_PLAYERS.put(session.getId(), player);
+    PLAYER_INPUTS.put(player.getId(), new PlayerInput());
+  }
+
   public static void removePlayer(Session session) {
     Player playerToRemove = SESSION_IDS_PLAYERS.get(session.getId());
     PLAYERS.remove(playerToRemove);
@@ -31,10 +38,15 @@ public class GameState {
   public static void start() {
     if (canStartTheGame()) {
       GAME_STATUS = GameStatus.RUNNING;
+      makePlayersReady();
       positionPlayers();
       gameStartTime = System.currentTimeMillis();
       gameStats = new GameAwesomeStats();
     }
+  }
+
+  private static void makePlayersReady() {
+    PLAYERS.keySet().forEach(p -> p.setStatus(PlayerStatus.READY));
   }
 
   public static boolean canStartTheGame() {
