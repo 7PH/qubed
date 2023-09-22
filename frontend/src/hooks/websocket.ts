@@ -55,8 +55,8 @@ export function useWebSocket() {
       console.error(error);
     });
 
-    socket.addEventListener("close", () => {
-      console.warn("connection closed");
+    socket.addEventListener("close", (event) => {
+      console.warn("connection closed: ", event.reason);
     });
 
     sendCommands = function <T>(content: T) {
