@@ -1,16 +1,16 @@
 package org.contamination;
 
 public class Player {
-  public static final double MOVEMENT_FORCE = 3;
+  public static final double MOVEMENT_FORCE = 1.5;
 
-  public static final double FRICTION_SICK = 40;
+  public static final double FRICTION_SICK = 30;
 
-  public static final double FRICTION = 5;
+  public static final double FRICTION = 3;
 
   /**
    * Player size in % of canvas width
    */
-  public static final double SPRITE_SIZE = 0.02;
+  public static final double SPRITE_SIZE = 0.015;
 
   private String name;
   private Integer id;

@@ -5,8 +5,8 @@ const FULL_CIRCLE = 2 * Math.PI;
 const BOUNDARY_COLOR = "pink";
 const BOUNDARY_WIDTH = 4;
 
-const PLAYER_USERNAME_FONT_SIZE = 1.8 / 100; // % of canvas width
-const PLAYER_SIZE = 2 / 100; // % of canvas width
+const PLAYER_USERNAME_FONT_SIZE = 1.3 / 100; // % of canvas width
+const PLAYER_SIZE = 1.5 / 100; // % of canvas width
 
 const PLAYER_FILL_COLOR = {
   [PlayerHealth.Healthy]: "#78eb7b",
