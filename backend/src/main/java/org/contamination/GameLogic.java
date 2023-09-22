@@ -1,7 +1,5 @@
 package org.contamination;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import static org.contamination.CollisionDetector.getPlayerCollisions;
 
 import java.util.List;
@@ -45,9 +43,9 @@ public class GameLogic implements Runnable {
 
   private void updatePlayerHealth() {
     GameState.PLAYERS.keySet().stream()
-      .filter(p -> p.getHealth() == PlayerHealth.INFECTED)
-      .filter(GameLogic::shouldBecomeContagious)
-      .forEach(p -> p.setHealth(PlayerHealth.CONTAGIOUS));
+        .filter(p -> p.getHealth() == PlayerHealth.INFECTED)
+        .filter(GameLogic::shouldBecomeContagious)
+        .forEach(p -> p.setHealth(PlayerHealth.CONTAGIOUS));
   }
 
   private static Boolean shouldBecomeContagious(Player player) {
@@ -88,46 +86,9 @@ public class GameLogic implements Runnable {
     }
   }
 
-  /**
-   * Get player direction angle based on its input. If no input is given, return
-   * -1
-   */
-  private double getDirectionAngle(PlayerInput playerInput) {
-    if (playerInput.right && playerInput.down) {
-      return Math.PI / 4;
-    } else if (playerInput.right && playerInput.up) {
-      return 7 * Math.PI / 4;
-    } else if (playerInput.left && playerInput.down) {
-      return 3 * Math.PI / 4;
-    } else if (playerInput.left && playerInput.up) {
-      return 5 * Math.PI / 4;
-    } else if (playerInput.right) {
-      return 0;
-    } else if (playerInput.down) {
-      return Math.PI / 2;
-    } else if (playerInput.left) {
-      return Math.PI;
-    } else if (playerInput.up) {
-      return 3 * Math.PI / 2;
-    } else {
-      return -1;
-    }
-  }
-
   private void calculateNewPosition(Player player, PlayerInput playerInput) {
-    double oldX = player.getX();
-    double oldY = player.getY();
-    double step =  player.getHealth() == PlayerHealth.INFECTED ? SPEED * 0.5 : SPEED;
-
-    double angle = getDirectionAngle(playerInput);
-    double xVel = angle != -1 ? Math.cos(angle) * step : 0;
-    double yVel = angle != -1 ? Math.sin(angle) * step : 0;
-
-    double newX = min(max(oldX + xVel, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
-    double newY = min(max(oldY + yVel, SIZE_OF_THE_SPRITE), 1 - SIZE_OF_THE_SPRITE);
-
-    player.setY(newY);
-    player.setX(newX);
+    player.applyForces(playerInput);
+    player.repositionInBoundaries();
 
     List<Player> playerCollisions = getPlayerCollisions(player);
     for (Player playerCollision : playerCollisions) {
