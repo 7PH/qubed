@@ -28,7 +28,7 @@ public class Player {
   private double lastTickTime;
 
   public Player(String name) {
-    this.name = name;
+    this.name = name.substring(0, 20);
     this.status = PlayerStatus.WAITING;
     this.health = PlayerHealth.HEALTHY;
     this.id = GameState.atomicInteger.getAndIncrement();
