@@ -45,9 +45,9 @@ public class GameLogic implements Runnable {
 
   private void updatePlayerHealth() {
     GameState.PLAYERS.keySet().stream()
-      .filter(p -> p.getPlayerHealth() == PlayerHealth.INFECTED)
+      .filter(p -> p.getHealth() == PlayerHealth.INFECTED)
       .filter(GameLogic::shouldBecomeContagious)
-      .forEach(p -> p.setPlayerHealth(PlayerHealth.CONTAGIOUS));
+      .forEach(p -> p.setHealth(PlayerHealth.CONTAGIOUS));
   }
 
   private static Boolean shouldBecomeContagious(Player player) {
@@ -62,7 +62,7 @@ public class GameLogic implements Runnable {
   private static void randomlyInfectOnePlayer() {
     List<Player> players = GameState.PLAYERS.keySet().stream().toList();
     Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size()));
-    player.setPlayerHealth(PlayerHealth.INFECTED);
+    player.setHealth(PlayerHealth.INFECTED);
     GameState.gameStats.onPlayerInfected(player.getId(), null);
   }
 
@@ -117,7 +117,7 @@ public class GameLogic implements Runnable {
   private void calculateNewPosition(Player player, PlayerInput playerInput) {
     double oldX = player.getX();
     double oldY = player.getY();
-    double step =  player.getPlayerHealth() == PlayerHealth.INFECTED ? SPEED * 0.5 : SPEED;
+    double step =  player.getHealth() == PlayerHealth.INFECTED ? SPEED * 0.5 : SPEED;
 
     double angle = getDirectionAngle(playerInput);
     double xVel = angle != -1 ? Math.cos(angle) * step : 0;
@@ -140,10 +140,10 @@ public class GameLogic implements Runnable {
       playerCollision.setX(playerCollision.getX() + Math.cos(alpha) * d);
       playerCollision.setY(playerCollision.getY() + Math.sin(alpha) * d);
 
-      if (playerCollision.getPlayerHealth() == PlayerHealth.CONTAGIOUS) {
+      if (playerCollision.getHealth() == PlayerHealth.CONTAGIOUS) {
         player.infect();
         GameState.gameStats.onPlayerInfected(player.getId(), playerCollision.getId());
-      } else if (player.getPlayerHealth() == PlayerHealth.CONTAGIOUS) {
+      } else if (player.getHealth() == PlayerHealth.CONTAGIOUS) {
         playerCollision.infect();
         GameState.gameStats.onPlayerInfected(playerCollision.getId(), player.getId());
       }

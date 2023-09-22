@@ -3,7 +3,7 @@ package org.contamination;
 public class Player {
   private String name;
   private Integer id;
-  private PlayerHealth playerHealth;
+  private PlayerHealth health;
   private Long infectedAt;
   private PlayerStatus status;
   private double x;
@@ -20,7 +20,7 @@ public class Player {
   public void clean() {
     this.x = Math.random();
     this.y = Math.random();
-    this.playerHealth = PlayerHealth.HEALTHY;
+    this.health = PlayerHealth.HEALTHY;
     this.status = PlayerStatus.WAITING;
   }
 
@@ -64,12 +64,12 @@ public class Player {
     this.y = y;
   }
 
-  public PlayerHealth getPlayerHealth() {
-    return playerHealth;
+  public PlayerHealth getHealth() {
+    return health;
   }
 
-  public void setPlayerHealth(PlayerHealth playerHealth) {
-    this.playerHealth = playerHealth;
+  public void setHealth(PlayerHealth health) {
+    this.health = health;
   }
 
   public Long getInfectedAt() {
@@ -81,13 +81,13 @@ public class Player {
   }
 
   public void infect() {
-    if (playerHealth == PlayerHealth.HEALTHY) {
-      playerHealth = PlayerHealth.INFECTED;
+    if (health == PlayerHealth.HEALTHY) {
+      health = PlayerHealth.INFECTED;
       infectedAt = System.currentTimeMillis();
     }
   }
 
   public boolean isSick() {
-    return playerHealth == PlayerHealth.INFECTED || playerHealth == PlayerHealth.CONTAGIOUS;
+    return health == PlayerHealth.INFECTED || health == PlayerHealth.CONTAGIOUS;
   }
 }
