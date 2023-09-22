@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { onMounted, onUnmounted, useRoute, useRouter } from "vue-router";
 import { connectionReference, gameState } from "../hooks/websocket";
 import { formatSurvivalTime, sortPlayers } from "../utils/score";
 
@@ -16,6 +16,22 @@ const goBackToWaitingRoom = () => {
 if (!connectionReference) {
   route.query.name ?  goBackToWaitingRoom() : router.push('/') 
 }
+
+function handleEnter(event: KeyboardEvent) {
+  if (event.key === "Enter") {
+    goBackToWaitingRoom();
+  }
+}
+
+
+onMounted(() => {
+  document.addEventListener("keypress", handleEnter);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keypress", handleEnter);
+});
+
 </script>
 
 <template>
