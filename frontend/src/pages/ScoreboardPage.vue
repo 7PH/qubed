@@ -94,7 +94,8 @@ const goBackToWaitingRoom = () => {
 }
 
 .header-row {
-  background-color: var(--primary-color);
+  background-image: linear-gradient(135deg, #81ffef 10%, #f067b4 100%);
+  color: rgba(10, 10, 10, 0.8);
   position: sticky;
   top: 0;
   border-bottom-width: 2px;
