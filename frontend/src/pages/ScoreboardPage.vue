@@ -10,7 +10,7 @@ const route = useRoute();
 const playerList = computed(() =>
   gameState.players
     .slice(0)
-    .sort((p1, p2) => p1.playerStats.survivalTime - p2.playerStats.survivalTime)
+    .sort((p1, p2) => p2.playerStats.survivalTime - p1.playerStats.survivalTime)
 );
 
 const goBackToWaitingRoom = () => {
@@ -40,14 +40,14 @@ const goBackToWaitingRoom = () => {
           <strong>Name</strong>
         </div>
         <div class="column">
-          <strong># Other Players Infected</strong>
+          <strong># Players Infected</strong>
         </div>
         <div class="column">
           <strong>Survival Time</strong>
         </div>
       </div>
 
-      <div class="row" v-for="player in gameState.players">
+      <div class="row" v-for="player in playerList">
         <div class="column">{{ player.name }}</div>
         <div class="column">
           {{ player.playerStats.numberOfInfectedPeople }}
