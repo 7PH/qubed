@@ -21,13 +21,7 @@ function handleStart() {
   startGame();
 }
 
-const everyoneReady = computed(
-  () =>
-    playerList.value.length > 0 &&
-    playerList.value.every((p) => p.status === PlayerStatus.Ready)
-);
-
-const canStart = computed(() => everyoneReady.value && playerList.value.length >= MIN_PLAYERS_NUMBER);
+const canStart = computed(() => playerList.value.filter((p) => p.status === PlayerStatus.Ready).length >= MIN_PLAYERS_NUMBER);
 </script>
 
 <template>
@@ -60,9 +54,6 @@ const canStart = computed(() => everyoneReady.value && playerList.value.length >
               player.status === PlayerStatus.Ready ? "✅ Ready" : "⏳ Wait up"
             }}</span
           >
-
-          <button class="secondary" style="margin-left: 10px" v-if="player.id !== playerId && player.status === PlayerStatus.Waiting">X</button>
-
           <button
             v-if="
               player.id === playerId && !(player.status === PlayerStatus.Ready)
