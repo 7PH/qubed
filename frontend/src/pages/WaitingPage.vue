@@ -92,10 +92,14 @@ const canStart = computed(() => everyoneReady.value && playerList.value.length >
 
   tr {
     padding: 8px 0;
+    height: 70px;
   }
-}
 
-td {
-    width: 50%;
+  td {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
 }
 </style>

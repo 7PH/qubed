@@ -1,4 +1,5 @@
 import { GameObject, Player, PlayerHealth } from "../types";
+import { ImagesLoaded } from "./image";
 import { sortPlayers } from "./score";
 
 const FULL_CIRCLE = 2 * Math.PI;
@@ -98,6 +99,40 @@ export function drawPlayers(
 }
 
 /**
+ * Draw a bush
+ */
+export function drawElement(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  size: number,
+  x: number,
+  y: number,
+  name?: string
+) {
+  const realX = x * canvas.width;
+  const realY = y * canvas.height;
+
+  const aspectRatio = image.width / image.height;
+  const bushWidth = size * canvas.width;
+  const bushHeight = bushWidth / aspectRatio;
+  context.drawImage(
+    image,
+    realX - bushWidth / 2,
+    realY - bushHeight,
+    bushWidth,
+    bushHeight
+  );
+
+  if (name) {
+    context.fillStyle = "#fff";
+    context.font = "bold " + Math.floor(bushHeight) * 0.3 + "px Arial";
+    context.textAlign = "center";
+    context.fillText(name, realX, realY - bushHeight * 1.3);
+  }
+}
+
+/**
  * Draw game boundaries
  */
 export function drawGameBoundaries(
@@ -140,26 +175,17 @@ export function drawGame(
   context: CanvasRenderingContext2D,
   gameObject: GameObject,
   initialized: boolean,
-  images: HTMLImageElement[]
+  images: ImagesLoaded
 ) {
-  drawGameBoundaries(canvas, context);
-  drawPlayers(canvas, context, gameObject);
-  if (initialized) {
-    context.drawImage(
-      images[0],
-      canvas.width / 80,
-      canvas.height / 80,
-      canvas.width / 5,
-      canvas.width / 5
-    );
-    context.drawImage(
-      images[0],
-      canvas.width / 2,
-      canvas.height / 2,
-      canvas.width / 5,
-      canvas.width / 5
-    );
+  if (!initialized) {
+    return;
   }
+
+  drawPlayers(canvas, context, gameObject);
+  drawElement(canvas, context, images.bush2, 0.2, 0.2, 1, "George");
+  drawElement(canvas, context, images.bush2, 0.2, 0.6, 1, "George");
+  drawGameBoundaries(canvas, context);
+
   if (gameObject.gameFinished) {
     const winner = sortPlayers(gameObject.players)[0];
     drawGameFinished(canvas, context, winner.name);

@@ -63,7 +63,7 @@ export const useGameRenderer = () => {
       contextRef.value,
       gameState,
       initialized.value,
-      images
+      images.value
     );
 
     ticking.value && requestAnimationFrame(tick);

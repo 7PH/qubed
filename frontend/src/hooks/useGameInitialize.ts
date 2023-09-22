@@ -1,26 +1,27 @@
-import { computed, ref } from "vue";
+import { Ref, onMounted, onUnmounted, ref } from "vue";
+import { ImagesLoaded, loadImages } from "../utils/image";
 
-export const useGameInitialize = () => {
-  const imagesLoaded = ref<{ [key: string]: boolean }>({});
+export function useGameInitialize() {
+  const initialized = ref(false);
+  const images: Ref<ImagesLoaded> = ref({});
 
-  const bushImg = new Image();
-  bushImg.src = "public/bush.png";
-
-  const images = [bushImg];
-
-  images.forEach((img) => {
-    img.addEventListener(
-      "load",
-      () => {
-        imagesLoaded.value[img.src] = true;
+  onMounted(async () => {
+    images.value = await loadImages([
+      {
+        name: "bush",
+        src: "public/bush.png",
       },
-      false
-    );
+      {
+        name: "bush2",
+        src: "public/bush2.png",
+      },
+    ]);
+    initialized.value = true;
   });
 
-  const initialized = computed(() =>
-    Object.values(imagesLoaded.value).every((val) => val)
-  );
+  onUnmounted(() => {
+    initialized.value = false;
+  });
 
   return { initialized, images };
-};
+}
