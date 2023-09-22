@@ -167,6 +167,15 @@ export function drawGameFinished(
   );
 }
 
+function drawFPS(context: CanvasRenderingContext2D, lastTickTime: number) {
+  const delta = performance.now() - lastTickTime;
+  const fps = Math.round(1000 / delta);
+  context.fillStyle = "#ccc";
+  context.font = "bold 10px Arial";
+  context.textAlign = "left";
+  context.fillText(`FPS: ${fps}`, 10, 20);
+}
+
 /**
  * Draw whole game
  */
@@ -175,8 +184,13 @@ export function drawGame(
   context: CanvasRenderingContext2D,
   gameObject: GameObject,
   initialized: boolean,
-  images: ImagesLoaded
+  images: ImagesLoaded,
+  lastTickTime: number
 ) {
+  // Always draw FPS
+  drawFPS(context, lastTickTime);
+
+  // If game is not initialized, don't draw anything else
   if (!initialized) {
     return;
   }
@@ -188,6 +202,7 @@ export function drawGame(
 
   drawGameBoundaries(canvas, context);
 
+  // Draw game finish overlay
   if (gameObject.gameFinished) {
     const winner = sortPlayers(gameObject.players)[0];
     drawGameFinished(canvas, context, winner.name);

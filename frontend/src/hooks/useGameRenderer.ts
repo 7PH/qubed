@@ -8,6 +8,7 @@ import { gameState, sendCommands } from "./websocket";
 export const useGameRenderer = () => {
   // Ticking logic
   const ticking = ref(false);
+  const lastTickTime = ref(0);
 
   // Canvas ref
   const containerRef = ref<HTMLDivElement | null>(null);
@@ -63,9 +64,11 @@ export const useGameRenderer = () => {
       contextRef.value,
       gameState,
       initialized.value,
-      images.value
+      images.value,
+      lastTickTime.value
     );
 
+    lastTickTime.value = performance.now();
     ticking.value && requestAnimationFrame(tick);
   }
 
