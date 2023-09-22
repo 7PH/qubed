@@ -22,11 +22,6 @@ const PLAYER_STROKE_COLOR = {
 
 const PLAYER_INFECTED_SHAKE_AMPLITUDE = 0.1 / 100; // % of canvas width
 
-const BUSHES = [
-  { x: 15, y: 15 },
-  { x: 200, y: 200 },
-];
-
 /**
  * Draw a player circle
  */
@@ -111,23 +106,6 @@ export function drawGameBoundaries(
   context.strokeStyle = BOUNDARY_COLOR;
   context.lineWidth = BOUNDARY_WIDTH;
   context.strokeRect(0, 0, canvas.width, canvas.height);
-}
-
-export function drawBushes(
-  canvas: HTMLCanvasElement,
-  context: CanvasRenderingContext2D
-) {
-  const bush = new Image();
-  bush.src =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkvK-agLzBfC3zhU6mOs1OYDDlSOuHmSSxw2dkAj4&s";
-  console.log(bush);
-  bush.addEventListener(
-    "load",
-    () => {
-      context.drawImage(bush, 0, 0, 10, 10);
-    },
-    false
-  );
 }
 
 export function drawGameFinished(
