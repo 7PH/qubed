@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { useGameRenderer } from '../hooks/useGameRenderer';
+import { useEndGameConfetti } from "../hooks/useEndGameConfetti";
+import { useGameRenderer } from "../hooks/useGameRenderer";
 
 const { container } = useGameRenderer();
+useEndGameConfetti();
 </script>
 
 <template>

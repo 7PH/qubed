@@ -11,22 +11,25 @@ const PLAYER_SANE_FILL_COLOR = "#78eb7b";
 const PLAYER_SANE_STROKE_COLOR = "#169119";
 const PLAYER_INFECTED_FILL_COLOR = "#f26179";
 const PLAYER_INFECTED_STROKE_COLOR = "#bf1531";
+const PLAYER_INFECTED_SHAKE_AMPLITUDE = 0.1 / 100; // % of canvas width
 
 /**
- * Draw a player
+ * Draw a player circle
  */
-export function drawPlayer(
+export function drawPlayerCircle(
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
   player: Player,
-  isLocalPlayer: boolean
 ) {
-  const realX = player.x * canvas.width;
-  const realY = player.y * canvas.height;
-  const realFontSize = PLAYER_USERNAME_FONT_SIZE * canvas.width;
+  let realX = player.x * canvas.width;
+  let realY = player.y * canvas.height;
   const realRadius = PLAYER_SIZE * canvas.width;
 
-  // Circle
+  if (player.infected) {
+    realX += canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
+    realY += canvas.height * PLAYER_INFECTED_SHAKE_AMPLITUDE * (Math.random() * 2 - 1);
+  }
+
   context.strokeStyle = player.infected
     ? PLAYER_INFECTED_STROKE_COLOR
     : PLAYER_SANE_STROKE_COLOR;
@@ -38,8 +41,22 @@ export function drawPlayer(
   context.arc(realX, realY, realRadius, 0, FULL_CIRCLE);
   context.fill();
   context.stroke();
+}
 
-  // Username
+/**
+ * Draw a player username
+ */
+export function drawPlayerUsername(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+  player: Player,
+  isLocalPlayer: boolean
+) {
+  const realX = player.x * canvas.width;
+  const realY = player.y * canvas.height;
+  const realFontSize = PLAYER_USERNAME_FONT_SIZE * canvas.width;
+  const realRadius = PLAYER_SIZE * canvas.width;
+
   context.fillStyle = player.infected
     ? PLAYER_INFECTED_FILL_COLOR
     : PLAYER_SANE_FILL_COLOR;
@@ -56,9 +73,9 @@ export function drawPlayers(
   context: CanvasRenderingContext2D,
   gameObject: GameObject
 ) {
-  for (let player of gameObject.players) {
-    drawPlayer(canvas, context, player, player.id === gameObject.playerId);
-  }
+  gameObject.players.forEach(player => drawPlayerCircle(canvas, context, player));
+  // Draw usernames afterwards so they are on top of circles
+  gameObject.players.forEach(player => drawPlayerUsername(canvas, context, player, player.id === gameObject.playerId));
 }
 
 /**
@@ -73,6 +90,24 @@ export function drawGameBoundaries(
   context.strokeRect(0, 0, canvas.width, canvas.height);
 }
 
+export function drawGameFinished(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+) {
+  context.fillStyle = "rgba(0, 0, 0, 0.5)";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = "white";
+  context.font = "bold 2rem Arial";
+  context.textAlign = "center";
+  context.fillText("Game finished!", canvas.width / 2, canvas.height / 2);
+
+  context.fillStyle = "white";
+  context.font = "bold 1.5rem Arial";
+  context.textAlign = "center";
+  context.fillText(`Winner: ${'????'}`, canvas.width / 2, canvas.height / 2 + 30);
+}
+
 /**
  * Draw whole game
  */
@@ -83,4 +118,7 @@ export function drawGame(
 ) {
   drawGameBoundaries(canvas, context);
   drawPlayers(canvas, context, gameObject);
+  if (gameObject.gameFinished) {
+    drawGameFinished(canvas, context);
+  }
 }
