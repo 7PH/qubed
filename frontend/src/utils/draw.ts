@@ -2,10 +2,10 @@ import { GameObject, Player, PlayerHealth } from "../types";
 import { ImagesLoaded } from "./image";
 import { sortPlayers } from "./score";
 
-const FULL_CIRCLE = 2 * Math.PI;
-
-const BOUNDARY_COLOR = "pink";
-const BOUNDARY_WIDTH = 4;
+/**
+ * Draw utilities. All sizes passed to draw functions are in % of canvas width.
+ * All coordinates passed to draw functions are in % of canvas width/height.
+ */
 
 const PLAYER_USERNAME_FONT_SIZE = 1.3 / 100; // % of canvas width
 const PLAYER_SIZE = 1.5 / 100; // % of canvas width
@@ -23,6 +23,9 @@ const PLAYER_STROKE_COLOR = {
 };
 
 const PLAYER_INFECTED_SHAKE_AMPLITUDE = 0.1 / 100; // % of canvas width
+
+const BOUNDARY_COLOR = "pink";
+const BOUNDARY_WIDTH = 4;
 
 /**
  * Draw a player circle
@@ -47,7 +50,7 @@ export function drawPlayerCircle(
   context.lineWidth = 1;
   context.fillStyle = PLAYER_FILL_COLOR[player.health];
   context.beginPath();
-  context.arc(realX, realY, realRadius, 0, FULL_CIRCLE);
+  context.arc(realX, realY, realRadius, 0, 2 * Math.PI);
   context.fill();
   context.stroke();
 }
