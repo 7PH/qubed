@@ -1,13 +1,13 @@
 package org.contamination;
 
-import static org.contamination.CollisionDetector.getPlayerCollisions;
-import static org.contamination.GameState.PLAYER_INPUTS;
-import static org.contamination.GameState.SPECTATORS;
-
+import com.google.gson.Gson;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
-import com.google.gson.Gson;
+import static org.contamination.CollisionDetector.getDistance;
+import static org.contamination.CollisionDetector.getPlayerCollisions;
+import static org.contamination.GameState.SPECTATORS;
 
 public class GameLogic implements Runnable {
   private static final long TIME_BEFORE_INFECTION = 7 * 1000;
@@ -24,6 +24,7 @@ public class GameLogic implements Runnable {
         }
         updatePlayerHealth();
         calculateNewPositions();
+        runBots();
         if (isZeroInfectedPlayer() && isReadyToInfectTime()) {
           randomlyInfectOnePlayer();
         }
@@ -45,13 +46,13 @@ public class GameLogic implements Runnable {
   }
 
   private void updatePlayerHealth() {
-    GameState.PLAYERS.keySet().stream()
+    Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
         .filter(p -> p.getHealth() == PlayerHealth.INFECTED)
         .filter(GameLogic::shouldBecomeContagious)
         .forEach(p -> p.setHealth(PlayerHealth.CONTAGIOUS));
 
     long timeSinceStart = System.currentTimeMillis() - GameState.gameStats.gameStart;
-    GameState.PLAYERS.keySet().stream()
+    Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
         .filter(p -> p.getHealth() == PlayerHealth.HEALTHY)
         .forEach(p -> {
           p.getPlayerStats().setSurvivalTime(timeSinceStart);
@@ -69,8 +70,8 @@ public class GameLogic implements Runnable {
   }
 
   private static void randomlyInfectOnePlayer() {
-    List<Player> players = GameState.PLAYERS.keySet().stream().toList();
-    Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size()));
+    List<Player> players = Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream()).toList();
+    Player player = players.get(new Random().nextInt(GameState.PLAYERS.keySet().size() + GameState.BOTS.size()));
     player.infect(null);
   }
 
@@ -79,12 +80,12 @@ public class GameLogic implements Runnable {
   }
 
   private static boolean isZeroInfectedPlayer() {
-    return GameState.PLAYERS.keySet().stream()
+    return Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
         .noneMatch(Player::isSick);
   }
 
   private long numberOfHealthyPlayers() {
-    return GameState.PLAYERS.keySet().stream()
+    return Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
         .filter(player -> player.getHealth() == PlayerHealth.HEALTHY)
         .count();
   }
@@ -94,6 +95,59 @@ public class GameLogic implements Runnable {
       PlayerInput playerInput = GameState.PLAYER_INPUTS.get(player.getId());
       calculateNewPosition(player, playerInput);
     }
+  }
+
+  private void runBots() {
+    for (Player bot : GameState.BOTS) {
+      if (bot.getHealth() == PlayerHealth.HEALTHY) {
+        runHealthyBot(bot);
+      } else {
+        runInfectedBot(bot);
+      }
+    }
+  }
+
+  private void runHealthyBot(Player bot) {
+    List<Player> infected = Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
+      .filter(player -> player.getHealth() != PlayerHealth.HEALTHY)
+      .toList();
+    Player closestInfected = getClosestPlayer(bot, infected);
+
+    PlayerInput input = new PlayerInput();
+    input.up = closestInfected != null && closestInfected.getY() > bot.getY() && bot.getY() > 0.1 ;
+    input.down = closestInfected != null && closestInfected.getY() < bot.getY() && bot.getY() < 0.9;
+    input.left = closestInfected != null && closestInfected.getX() > bot.getX() && bot.getX() > 0.1;
+    input.right = closestInfected != null && closestInfected.getX() < bot.getX() && bot.getX() < 0.9;
+    calculateNewPosition(bot, input);
+  }
+
+  private void runInfectedBot(Player bot) {
+    List<Player> healthy = Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
+      .filter(player -> player.getHealth() == PlayerHealth.HEALTHY)
+      .toList();
+    Player closestHealthy = getClosestPlayer(bot, healthy);
+
+    PlayerInput input = new PlayerInput();
+    input.up = closestHealthy != null && closestHealthy.getY() < bot.getY();
+    input.down = closestHealthy != null && closestHealthy.getY() > bot.getY();
+    input.left = closestHealthy != null && closestHealthy.getX() < bot.getX();
+    input.right = closestHealthy != null && closestHealthy.getX() > bot.getX();
+    calculateNewPosition(bot, input);
+  }
+
+  private Player getClosestPlayer(Player target, List<Player> list) {
+    Player closestPlayer = null;
+    double shortestDistance = 99999;
+
+    for (Player p : list) {
+      double d = getDistance(target.getX(), target.getY(), p.getX(), p.getY());
+      if (d < shortestDistance) {
+        shortestDistance = d;
+        closestPlayer = p;
+      }
+    }
+
+    return closestPlayer;
   }
 
   private void calculateNewPosition(Player player, PlayerInput playerInput) {
@@ -121,7 +175,7 @@ public class GameLogic implements Runnable {
 
   public void sendState() {
     GameStateMessage gameStateMessage = new GameStateMessage(GameState.GAME_STATUS.name().toLowerCase(),
-        GameState.PLAYERS.keySet().stream().map(PlayerResponse::new).toList());
+        Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream()).map(PlayerResponse::new).toList());
     String messageString = new Gson().toJson(new ReplyMessage("GAME_STATE", gameStateMessage));
     GameState.PLAYERS.values().forEach(
         s -> s.getAsyncRemote().sendText(messageString));

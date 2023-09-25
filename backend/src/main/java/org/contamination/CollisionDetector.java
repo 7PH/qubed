@@ -4,16 +4,18 @@ import static org.contamination.GameState.PLAYERS;
 import static org.contamination.Player.SPRITE_SIZE;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CollisionDetector {
 
   public static boolean anyCollision(Player player) {
-    return PLAYERS.keySet().stream()
+    return Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
         .anyMatch(otherPlayer -> arePlayersColliding(player, otherPlayer));
   }
 
   public static List<Player> getPlayerCollisions(Player player) {
-    return PLAYERS.keySet().stream()
+    return Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
         .filter(otherPlayer -> arePlayersColliding(player, otherPlayer))
         .toList();
   }
@@ -30,7 +32,7 @@ public class CollisionDetector {
     return distance / 2 < SPRITE_SIZE;
   }
 
-  private static double getDistance(double x1, double y1, double x2, double y2) {
+  public static double getDistance(double x1, double y1, double x2, double y2) {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
   }
 
