@@ -1,11 +1,13 @@
 package org.contamination;
 
+import java.util.stream.Stream;
+
 import static java.lang.Math.ceil;
 
 public class ScoreCalculator {
 
   public static void setPlayerScores() {
-    GameState.PLAYERS.keySet().stream()
+    Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
       .peek(player -> System.out.println("Calculating score for " + player.getName()))
       .map(Player::getPlayerStats)
       .forEach(stat -> stat.setScore(calculatePlayerScore(stat)));
@@ -40,8 +42,8 @@ public class ScoreCalculator {
   }
 
   private static long timeSurvivalFormula(long survivalTime) {
-    int totalPlayers = GameState.PLAYERS.size();
-    long scdLastSurvivor = GameState.PLAYERS.keySet().stream()
+    int totalPlayers = GameState.PLAYERS.size() + GameState.BOTS.size();
+    long scdLastSurvivor = Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream())
       .map(Player::getPlayerStats)
       .map(PlayerStats::survivalTime)
       .sorted()

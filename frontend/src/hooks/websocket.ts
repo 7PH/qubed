@@ -13,6 +13,8 @@ enum OutboundMessageType {
   Start = "start",
   Commands = "commands",
   Ready = "ready",
+  AddBot = "add_bot",
+  RemoveBot = "remove_bot",
 }
 
 enum InboundMessageType {
@@ -120,6 +122,18 @@ export function useWebSocket() {
     );
   }
 
+  function addBot() {
+    connection.value?.send(
+      JSON.stringify({ type: OutboundMessageType.AddBot, content: {} })
+    );
+  }
+
+  function removeBot() {
+    connection.value?.send(
+      JSON.stringify({ type: OutboundMessageType.RemoveBot, content: {} })
+    );
+  }
+
   function setReady() {
     connection.value?.send(
       JSON.stringify({
@@ -135,5 +149,14 @@ export function useWebSocket() {
     }
   }
 
-  return { playerId, playerList, connect, disconnect, setReady, startGame };
+  return {
+    playerId,
+    playerList,
+    connect,
+    disconnect,
+    setReady,
+    startGame,
+    addBot,
+    removeBot,
+  };
 }
