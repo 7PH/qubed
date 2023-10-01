@@ -8,7 +8,7 @@ import org.eclipse.jetty.websocket.javax.server.config.JavaxWebSocketServletCont
 public class ContaminationGame {
   public static void main(String[] args) throws Exception {
 
-    Server server = new Server(8080);
+    Server server = new Server(8082);
     ServerConnector connector = new ServerConnector(server);
     server.addConnector(connector);
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);

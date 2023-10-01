@@ -5,7 +5,7 @@ import { GameObject, GameState, Player } from "../types";
 const GAME_END_DELAY = 5000;
 
 const PORT =
-  document.location.hostname === "localhost" ? 8080 : document.location.port;
+  document.location.hostname === "localhost" ? 8082 : document.location.port;
 
 const WS_PROTOCOL = document.location.protocol === "https:" ? "wss" : "ws";
 

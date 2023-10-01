@@ -16,7 +16,7 @@ services:
     env_file:
       - .env
     volumes:
-      - "./letsencrypt:/letsencrypt"
+      - ./letsencrypt:/letsencrypt
       - ./dynamic.yml:/configuration/dynamic.yml:ro
     networks:
       - main
@@ -34,7 +34,7 @@ services:
   backend:
     build: ./backend
     expose:
-        - 8080
+        - 8082
     networks:
       - main
 
