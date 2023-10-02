@@ -3,10 +3,18 @@ import { computed, onMounted, onUnmounted } from "vue";
 import { useWebSocket } from "../hooks/websocket";
 import { PlayerStatus } from "../types";
 
-const MIN_PLAYERS_NUMBER = 3;
+const MIN_PLAYERS_NUMBER = 1;
 
-const { playerId, playerList, connect, disconnect, setReady, startGame } =
-  useWebSocket();
+const {
+  playerId,
+  playerList,
+  connect,
+  disconnect,
+  setReady,
+  startGame,
+  addBot,
+  removeBot,
+} = useWebSocket();
 
 onMounted(() => {
   disconnect(); // disconnect if possible
@@ -19,6 +27,14 @@ function handleReadyClick() {
 
 function handleStart() {
   startGame();
+}
+
+function handleAddBot() {
+  addBot();
+}
+
+function handleRemoveBot() {
+  removeBot();
 }
 
 function handleEnter(event: KeyboardEvent) {
@@ -91,6 +107,12 @@ const hasPlayersNotReady = computed(() => {
       </tr>
     </table>
 
+    <div class="bot-control">
+      <div>Bots:</div>
+      <button @click="handleAddBot">Add</button>
+      <button @click="handleRemoveBot">Remove</button>
+    </div>
+
     <div style="margin-top: 2rem">
       <button class="w-100" :disabled="!canStart" @click="handleStart">
         <span style="margin-right: .5em;" v-if="hasPlayersNotReady">
@@ -119,5 +141,20 @@ const hasPlayersNotReady = computed(() => {
 td {
   width: 50%;
   height: 45px;
+}
+
+.bot-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid pink;
+
+  > div {
+    padding: 0.6em 1.2em;
+  }
+
+  > button {
+    padding: 0.4em 1.2em;
+    margin-right: 8px;
+  }
 }
 </style>

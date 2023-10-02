@@ -1,13 +1,17 @@
 package org.contamination;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 import javax.websocket.Session;
 
 import static org.contamination.CollisionDetector.anyCollision;
 
 public class GameState {
+  public static Set<Player> BOTS = new HashSet<>();
   public static Map<Player, Session> PLAYERS = new ConcurrentHashMap<>();
   public static Map<Player, Session> SPECTATORS = new ConcurrentHashMap<>();
   public static Map<String, Player> SESSION_IDS_PLAYERS = new ConcurrentHashMap<>();
@@ -40,7 +44,8 @@ public class GameState {
     if (canStartTheGame()) {
       GAME_STATUS = GameStatus.RUNNING;
       makePlayersReady();
-      positionPlayers();
+      positionPlayers(PLAYERS.keySet());
+      positionPlayers(BOTS);
       gameStartTime = System.currentTimeMillis();
       gameStats = new GameAwesomeStats();
     }
@@ -50,8 +55,24 @@ public class GameState {
     PLAYERS.keySet().forEach(p -> p.setStatus(PlayerStatus.READY));
   }
 
+  public static void addBot() {
+    Integer index = BOTS.size() + 1;
+    if (index < 10) {
+      Player newBot = new Player("bot " + index);
+      newBot.setStatus(PlayerStatus.READY);
+      BOTS.add(newBot);
+    }
+  }
+
+  public static void removeBot() {
+    if (BOTS.size() > 0) {
+      Player lastBot = BOTS.stream().toList().get(BOTS.size() - 1);
+      BOTS.remove(lastBot);
+    }
+  }
+
   public static boolean canStartTheGame() {
-    return numberOfPlayer() > 2;
+    return numberOfPlayer() >= 1;
   }
 
   private static int numberOfPlayer() {
@@ -60,11 +81,12 @@ public class GameState {
 
   public static void clean() {
     PLAYERS.keySet().forEach(Player::clean);
+    BOTS.forEach(Player::clean);
     gameStartTime = 0;
   }
 
-  public static void positionPlayers() {
-    for (Player player : PLAYERS.keySet()) {
+  public static void positionPlayers(Set<Player> players) {
+    for (Player player : players) {
 
       while (anyCollision(player)) {
         player.setX(Math.random());
@@ -75,7 +97,7 @@ public class GameState {
   }
 
   public static Player getPlayerById(Integer id) {
-    return GameState.PLAYERS.keySet().stream().filter(p -> p.getId().equals(id)).findFirst().get();
+    return Stream.concat(GameState.PLAYERS.keySet().stream(), GameState.BOTS.stream()).filter(p -> p.getId().equals(id)).findFirst().get();
   }
 
 }

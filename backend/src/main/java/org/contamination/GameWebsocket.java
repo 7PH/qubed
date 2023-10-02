@@ -39,6 +39,8 @@ public class GameWebsocket {
     Player player = SESSION_IDS_PLAYERS.get(session.getId());
     switch (msg.type()) {
       case "ready" -> player.setStatus(READY);
+      case "add_bot" -> GameState.addBot();
+      case "remove_bot" -> GameState.removeBot();
       case "start" -> GameState.start();
       case "commands" -> handlePlayerInputChange(player, msg);
     }
